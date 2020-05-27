@@ -1,4 +1,4 @@
-defmodule HodonoWeb.ConnCase do
+defmodule HybridBlogWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule HodonoWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use HodonoWeb.ConnCase, async: true`, although
+  by setting `use HybridBlogWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,20 +22,20 @@ defmodule HodonoWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import HodonoWeb.ConnCase
+      import HybridBlogWeb.ConnCase
 
-      alias HodonoWeb.Router.Helpers, as: Routes
+      alias HybridBlogWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint HodonoWeb.Endpoint
+      @endpoint HybridBlogWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hodono.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(HybridBlog.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hodono.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(HybridBlog.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

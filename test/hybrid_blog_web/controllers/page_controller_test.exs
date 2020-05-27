@@ -1,5 +1,5 @@
-defmodule HodonoWeb.PageControllerTest do
-  use HodonoWeb.ConnCase
+defmodule HybridBlogWeb.PageControllerTest do
+  use HybridBlogWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

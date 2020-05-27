@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :hodono,
-  ecto_repos: [Hodono.Repo]
+config :hybrid_blog,
+  ecto_repos: [HybridBlog.Repo]
 
 # Configures the endpoint
-config :hodono, HodonoWeb.Endpoint,
+config :hybrid_blog, HybridBlogWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "KHLHTdPNoENq3XAQ3tb+5zSUekqHikHqVBiaxoJBDpzHZwssOai23ytcYIRuELf1",
-  render_errors: [view: HodonoWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Hodono.PubSub,
+  render_errors: [view: HybridBlogWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: HybridBlog.PubSub,
   live_view: [signing_salt: "9qw4nku9"]
 
 # Configures Elixir's Logger
@@ -29,3 +29,5 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
+
+config :hybrid_blog, :title, "Hodono Tiny Developers"

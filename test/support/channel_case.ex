@@ -1,4 +1,4 @@
-defmodule HodonoWeb.ChannelCase do
+defmodule HybridBlogWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule HodonoWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use HodonoWeb.ChannelCase, async: true`, although
+  by setting `use HybridBlogWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule HodonoWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import HodonoWeb.ChannelCase
+      import HybridBlogWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint HodonoWeb.Endpoint
+      @endpoint HybridBlogWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hodono.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(HybridBlog.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hodono.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(HybridBlog.Repo, {:shared, self()})
     end
 
     :ok

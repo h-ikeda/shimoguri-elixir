@@ -1,4 +1,4 @@
-defmodule HodonoWeb.ErrorHelpers do
+defmodule HybridBlogWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -39,9 +39,9 @@ defmodule HodonoWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(HodonoWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(HybridBlogWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(HodonoWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(HybridBlogWeb.Gettext, "errors", msg, opts)
     end
   end
 end

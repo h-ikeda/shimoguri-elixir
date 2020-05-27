@@ -1,5 +1,5 @@
-defmodule HodonoWeb.Router do
-  use HodonoWeb, :router
+defmodule HybridBlogWeb.Router do
+  use HybridBlogWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,14 +13,14 @@ defmodule HodonoWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", HodonoWeb do
+  scope "/", HybridBlogWeb do
     pipe_through :browser
 
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", HodonoWeb do
+  # scope "/api", HybridBlogWeb do
   #   pipe_through :api
   # end
 
@@ -36,7 +36,7 @@ defmodule HodonoWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: HodonoWeb.Telemetry
+      live_dashboard "/dashboard", metrics: HybridBlogWeb.Telemetry
     end
   end
 end

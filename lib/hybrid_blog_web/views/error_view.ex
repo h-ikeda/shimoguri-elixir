@@ -1,5 +1,5 @@
-defmodule HodonoWeb.ErrorView do
-  use HodonoWeb, :view
+defmodule HybridBlogWeb.ErrorView do
+  use HybridBlogWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

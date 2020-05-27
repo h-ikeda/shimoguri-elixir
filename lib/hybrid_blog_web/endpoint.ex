@@ -1,16 +1,16 @@
-defmodule HodonoWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :hodono
+defmodule HybridBlogWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :hybrid_blog
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_hodono_key",
+    key: "_hybrid_blog_key",
     signing_salt: "Xz4LzR0p"
   ]
 
-  socket "/socket", HodonoWeb.UserSocket,
+  socket "/socket", HybridBlogWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -22,7 +22,7 @@ defmodule HodonoWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :hodono,
+    from: :hybrid_blog,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
@@ -32,7 +32,7 @@ defmodule HodonoWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :hodono
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :hybrid_blog
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -50,5 +50,5 @@ defmodule HodonoWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug HodonoWeb.Router
+  plug HybridBlogWeb.Router
 end

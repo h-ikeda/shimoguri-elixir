@@ -1,9 +1,9 @@
-defmodule Hodono.MixProject do
+defmodule HybridBlog.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :hodono,
+      app: :hybrid_blog,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Hodono.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Hodono.Application, []},
+      mod: {HybridBlog.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

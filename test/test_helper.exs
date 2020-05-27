@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(Hodono.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(HybridBlog.Repo, :manual)

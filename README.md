@@ -1,4 +1,4 @@
-# Hodono
+# HybridBlog
 
 To start your Phoenix server:
 

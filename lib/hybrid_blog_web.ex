@@ -1,12 +1,12 @@
-defmodule HodonoWeb do
+defmodule HybridBlogWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use HodonoWeb, :controller
-      use HodonoWeb, :view
+      use HybridBlogWeb, :controller
+      use HybridBlogWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,19 +19,19 @@ defmodule HodonoWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: HodonoWeb
+      use Phoenix.Controller, namespace: HybridBlogWeb
 
       import Plug.Conn
-      import HodonoWeb.Gettext
-      alias HodonoWeb.Router.Helpers, as: Routes
+      import HybridBlogWeb.Gettext
+      alias HybridBlogWeb.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/hodono_web/templates",
-        namespace: HodonoWeb
+        root: "lib/hybrid_blog_web/templates",
+        namespace: HybridBlogWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -54,7 +54,7 @@ defmodule HodonoWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import HodonoWeb.Gettext
+      import HybridBlogWeb.Gettext
     end
   end
 
@@ -66,9 +66,9 @@ defmodule HodonoWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import HodonoWeb.ErrorHelpers
-      import HodonoWeb.Gettext
-      alias HodonoWeb.Router.Helpers, as: Routes
+      import HybridBlogWeb.ErrorHelpers
+      import HybridBlogWeb.Gettext
+      alias HybridBlogWeb.Router.Helpers, as: Routes
     end
   end
 

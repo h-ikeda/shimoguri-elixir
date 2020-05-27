@@ -1,4 +1,4 @@
-defmodule HodonoWeb.Telemetry do
+defmodule HybridBlogWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -31,11 +31,11 @@ defmodule HodonoWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("hodono.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("hodono.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("hodono.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("hodono.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("hodono.repo.query.idle_time", unit: {:native, :millisecond}),
+      summary("hybrid_blog.repo.query.total_time", unit: {:native, :millisecond}),
+      summary("hybrid_blog.repo.query.decode_time", unit: {:native, :millisecond}),
+      summary("hybrid_blog.repo.query.query_time", unit: {:native, :millisecond}),
+      summary("hybrid_blog.repo.query.queue_time", unit: {:native, :millisecond}),
+      summary("hybrid_blog.repo.query.idle_time", unit: {:native, :millisecond}),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),
@@ -49,7 +49,7 @@ defmodule HodonoWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {HodonoWeb, :count_users, []}
+      # {HybridBlogWeb, :count_users, []}
     ]
   end
 end

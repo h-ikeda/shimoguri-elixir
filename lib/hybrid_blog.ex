@@ -1,6 +1,6 @@
-defmodule Hodono do
+defmodule HybridBlog do
   @moduledoc """
-  Hodono keeps the contexts that define your domain
+  HybridBlog keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

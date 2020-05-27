@@ -1,4 +1,4 @@
-defmodule Hodono.DataCase do
+defmodule HybridBlog.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Hodono.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Hodono.DataCase, async: true`, although
+  by setting `use HybridBlog.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Hodono.DataCase do
 
   using do
     quote do
-      alias Hodono.Repo
+      alias HybridBlog.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Hodono.DataCase
+      import HybridBlog.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hodono.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(HybridBlog.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hodono.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(HybridBlog.Repo, {:shared, self()})
     end
 
     :ok
