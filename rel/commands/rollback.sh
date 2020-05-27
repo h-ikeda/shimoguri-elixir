@@ -1,4 +1,4 @@
 #!/bin/sh
-info "starting rollback..."
+info "starting rollback"
 release_ctl eval --mfa "HybridBlog.Release.rollback/1" --argv -- "$@"
-success "rollback completed."
+success "rollback completed"

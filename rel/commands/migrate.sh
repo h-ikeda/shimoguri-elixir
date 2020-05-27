@@ -1,4 +1,4 @@
 #!/bin/sh
-info "starting migration..."
+info "starting migration"
 release_ctl eval --mfa "HybridBlog.Release.migrate/1" --argv -- "$@"
-success "migration completed."
+success "migration completed"
