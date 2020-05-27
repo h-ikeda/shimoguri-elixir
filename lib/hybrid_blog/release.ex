@@ -6,9 +6,9 @@ defmodule HybridBlog.Release do
     for repo <- Application.fetch_env!(@app, :ecto_repos) do
       {:ok, _, _} =
         Ecto.Migrator.with_repo(repo, fn repo ->
-          cond do
-            repo.__adapter__.storage_up(repo.config) in [:ok, {:error, :already_up}] ->
-              Ecto.Migrator.run(repo, :up, all: true)
+          case repo.__adapter__.storage_up(repo.config) do
+            {:error, reason} when reason != :already_up -> raise reason
+            _ -> Ecto.Migrator.run(repo, :up, all: true)
           end
         end)
     end
