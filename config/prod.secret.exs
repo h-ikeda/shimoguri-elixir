@@ -12,9 +12,9 @@ database_url =
     """
 
 config :hybrid_blog, HybridBlog.Repo,
-  # ssl: true,
+  ssl: true,
   url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "2")
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
@@ -35,7 +35,7 @@ config :hybrid_blog, HybridBlogWeb.Endpoint,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-#     config :hybrid_blog, HybridBlogWeb.Endpoint, server: true
+config :hybrid_blog, HybridBlogWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
