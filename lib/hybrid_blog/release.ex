@@ -1,6 +1,6 @@
 defmodule HybridBlog.Release do
   def migrate(_argv) do
-    :ok = Application.ensure_started(:ssl)
+    {:ok, _} = Application.ensure_all_started(:ssl)
 
     for repo <- Application.fetch_env!(@app, :ecto_repos) do
       {:ok, _, _} =
@@ -14,7 +14,7 @@ defmodule HybridBlog.Release do
   end
 
   def rollback(argv) do
-    :ok = Application.ensure_started(:ssl)
+    {:ok, _} = Application.ensure_all_started(:ssl)
     {options, _, _} = OptionParser.parse(argv, strict: [repo: :string, version: :integer])
     repo = Keyword.fetch!(options, :repo)
     version = Keyword.fetch!(options, :version)
