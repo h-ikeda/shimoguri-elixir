@@ -20,7 +20,7 @@ defmodule HybridBlog.MixProject do
   def application do
     [
       mod: {HybridBlog.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ssl]
     ]
   end
 
