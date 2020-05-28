@@ -46,7 +46,7 @@ config :logger, level: :info
 # We also recommend setting `force_ssl` in your endpoint, ensuring
 # no data is ever sent via http, always redirecting to https:
 #
-config :hybrid_blog, HybridBlogWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
+# config :hybrid_blog, HybridBlogWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
