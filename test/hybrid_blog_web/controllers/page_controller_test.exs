@@ -6,7 +6,7 @@ defmodule HybridBlogWeb.PageControllerTest do
       conn = get(conn, "http://example.com")
       assert redirected_to(conn, :moved_permanently) == "http://localhost"
     end
-    
+
     test "GET non canonical host path", %{conn: conn} do
       conn = get(conn, "http://example.com/path/to/content")
       assert redirected_to(conn, :moved_permanently) == "http://localhost/path/to/content"
