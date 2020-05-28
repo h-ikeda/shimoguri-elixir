@@ -1,6 +1,8 @@
 defmodule HybridBlogWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :hybrid_blog
 
+  plug :delete_req_header, "x-forwarded-port"
+
   plug PlugCanonicalHost,
     canonical_host: Application.compile_env(:hybrid_blog, HybridBlogWeb.Endpoint)[:url][:host]
 
