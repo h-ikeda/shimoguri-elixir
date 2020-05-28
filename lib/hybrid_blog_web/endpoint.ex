@@ -1,6 +1,8 @@
 defmodule HybridBlogWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :hybrid_blog
 
+  # Gigalixir is confusingly putting X-Forwarded-Port header with value 80.
+  # We have to remove this untrustworthy header and respect X-Forwarded-Proto with Plug.SSL .
   plug :delete_req_header, "x-forwarded-port"
 
   plug PlugCanonicalHost,
