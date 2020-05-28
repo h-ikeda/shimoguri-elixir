@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :hybrid_blog, HybridBlogWeb.Endpoint,
-  url: [host: "www.hodono.tk", port: 80],
+  url: [host: "www.hodono.tk", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json",
   version: Application.spec(:phoenix_distillery, :vsn)
 
@@ -46,7 +46,7 @@ config :logger, level: :info
 # We also recommend setting `force_ssl` in your endpoint, ensuring
 # no data is ever sent via http, always redirecting to https:
 #
-# config :hybrid_blog, HybridBlogWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
+config :hybrid_blog, HybridBlogWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
