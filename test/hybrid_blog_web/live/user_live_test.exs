@@ -22,7 +22,7 @@ defmodule HybridBlogWeb.UserLiveTest do
   describe "Index" do
     setup [:create_user]
 
-    test "lists all users", %{conn: conn, user: user} do
+    test "lists all users", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, Routes.user_index_path(conn, :index))
 
       assert html =~ "Listing Users"
