@@ -46,7 +46,8 @@ defmodule HybridBlog.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.1"},
-      {:plug_canonical_host, "~> 2.0"}
+      {:plug_canonical_host, "~> 2.0"},
+      {:floki, "~> 0.26.0", only: :test}
     ]
   end
 
