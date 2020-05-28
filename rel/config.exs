@@ -38,7 +38,7 @@ environment :prod do
   set(include_src: false)
   set(cookie: :"*0qb<cE(1x(K|;67(?w]D5g?m2;YE~K:y|P2ceMd0tv$sYoG[stS1Ii(pd)[*H`%")
   set(vm_args: "rel/vm.args")
-  set(pre_start_hooks: "rel/hooks/pre_start")
+  # set(pre_start_hooks: "rel/hooks/pre_start")
 end
 
 # You may define one or more releases in this file.
