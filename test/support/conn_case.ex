@@ -38,6 +38,6 @@ defmodule HybridBlogWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(HybridBlog.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    {:ok, conn: %{Phoenix.ConnTest.build_conn() | host: "localhost"}}
   end
 end
