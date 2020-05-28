@@ -20,6 +20,7 @@ defmodule HybridBlogWeb do
   def controller do
     quote do
       use Phoenix.Controller, namespace: HybridBlogWeb
+      import Phoenix.LiveView.Controller
 
       import Plug.Conn
       import HybridBlogWeb.Gettext
@@ -42,12 +43,29 @@ defmodule HybridBlogWeb do
     end
   end
 
+  def live_view do
+    quote do
+      use Phoenix.LiveView, layout: {HybridBlogWeb.LayoutView, "live.html"}
+      import HybridBlogWeb.LiveHelpers
+      unquote(view_helpers())
+    end
+  end
+
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+      import HybridBlogWeb.LiveHelpers
+      unquote(view_helpers())
+    end
+  end
+
   def router do
     quote do
       use Phoenix.Router
 
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 

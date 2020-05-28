@@ -4,9 +4,10 @@ defmodule HybridBlogWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :put_root_layout, {HybridBlogWeb.LayoutView, :root}
   end
 
   pipeline :api do
@@ -17,6 +18,11 @@ defmodule HybridBlogWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/users", UserLive.Index, :index
+    live "/users/new", UserLive.Index, :new
+    live "/users/edit/:id", UserLive.Index, :edit
+    live "/users/:id", UserLive.Show, :show
+    live "/users/:id/edit", UserLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
