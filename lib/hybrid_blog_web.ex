@@ -83,6 +83,7 @@ defmodule HybridBlogWeb do
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
+      import Phoenix.LiveView.Helpers
 
       import HybridBlogWeb.ErrorHelpers
       import HybridBlogWeb.Gettext
