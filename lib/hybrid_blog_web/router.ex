@@ -12,6 +12,7 @@ defmodule HybridBlogWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   scope "/", HybridBlogWeb do
@@ -23,12 +24,16 @@ defmodule HybridBlogWeb.Router do
     live "/users/edit/:id", UserLive.Index, :edit
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/edit", UserLive.Show, :edit
+    get "/auth/:provider/callback", SessionController, :callback
+    get "/auth/signout", SessionController, :sign_out
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", HybridBlogWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", HybridBlogWeb do
+    pipe_through :api
+
+    get "/authorize_url", SessionController, :authorize_url
+  end
 
   # Enables LiveDashboard only for development
   #

@@ -35,6 +35,13 @@ defmodule HybridBlog.AccountsTest do
       assert user.picture == "some picture"
     end
 
+    test "create_user/1 with google_sub creates a user" do
+      assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs, google_sub: "01234567890")
+      assert user.name == "some name"
+      assert user.picture == "some picture"
+      assert user.google_sub == "01234567890"
+    end
+
     test "create_user/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
     end

@@ -55,6 +55,13 @@ defmodule HybridBlog.Accounts do
     |> Repo.insert()
   end
 
+  @spec create_user(map, keyword) :: {:ok, Ecto.Schema.t()} | {:error, Ecto.Changeset.t()}
+  def create_user(attrs, google_sub: google_sub) do
+    %User{google_sub: google_sub}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a user.
 
@@ -100,5 +107,24 @@ defmodule HybridBlog.Accounts do
   """
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  @doc """
+  Gets a single user by a specific field.
+
+  Return `nil` if the User does not exist.
+
+  ## Examples
+
+      iex> get_user_by(:field, 123)
+      %User{field: 123}
+
+      iex> get_user_by(:field, 456)
+      nil
+
+  """
+  @spec get_user_by(atom, any) :: %User{} | nil
+  def get_user_by(field, value) when is_atom(field) do
+    Repo.get_by(User, [{field, value}])
   end
 end

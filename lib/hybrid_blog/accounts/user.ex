@@ -7,6 +7,7 @@ defmodule HybridBlog.Accounts.User do
   schema "users" do
     field :name, :binary
     field :picture, :binary
+    field :google_sub, :binary
 
     timestamps()
   end

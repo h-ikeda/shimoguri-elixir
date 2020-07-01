@@ -39,3 +39,9 @@ config :hybrid_blog, HybridBlogWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+config :hybrid_blog, :assent_strategies,
+  google: [
+    client_id: System.fetch_env!("GOOGLE_CLIENT_ID"),
+    client_secret: System.fetch_env!("GOOGLE_CLIENT_SECRET")
+  ]

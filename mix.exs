@@ -20,9 +20,12 @@ defmodule HybridBlog.MixProject do
   def application do
     [
       mod: {HybridBlog.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: extra_applications(Mix.env())
     ]
   end
+
+  defp extra_applications(:dev), do: [:logger, :runtime_tools, :os_mon]
+  defp extra_applications(_), do: [:logger, :runtime_tools]
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
@@ -47,7 +50,8 @@ defmodule HybridBlog.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.1"},
       {:plug_canonical_host, "~> 2.0"},
-      {:floki, "~> 0.26.0", only: :test}
+      {:floki, "~> 0.26.0", only: :test},
+      {:assent, "~> 0.1.12"}
     ]
   end
 
