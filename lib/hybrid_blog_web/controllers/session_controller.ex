@@ -30,7 +30,7 @@ defmodule HybridBlogWeb.SessionController do
   @spec sign_in(conn, atom, map) :: conn | error
   defp sign_in(conn, field, %{"sub" => sub} = attrs) do
     if user = Accounts.get_user_by(field, sub) do
-      {:ok, put_session(conn, @current_user_key, attrs)}
+      {:ok, put_session(conn, @current_user_key, user)}
     else
       sign_up(conn, field, attrs)
     end
