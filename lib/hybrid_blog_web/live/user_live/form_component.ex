@@ -29,7 +29,15 @@ defmodule HybridBlogWeb.UserLive.FormComponent do
 
   defp save_user(socket, :edit, user_params) do
     case Accounts.update_user(socket.assigns.user, user_params) do
-      {:ok, _user} ->
+      {:ok, user} ->
+        :ok =
+          HybridBlogWeb.Endpoint.broadcast_from(
+            self(),
+            "user:#{user.id}",
+            "change",
+            Map.take(user, [:name, :picture])
+          )
+
         {:noreply,
          socket
          |> put_flash(:info, "User updated successfully")

@@ -30,8 +30,6 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>
     </main>
-    <aside>
-      <%= live_render @conn, HybridBlogWeb.SessionLive.Status %>
-    </aside>
+    <%= session_menu @conn %>
   </body>
 </html>
