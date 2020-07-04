@@ -30,7 +30,7 @@ defmodule HybridBlogWeb.SessionController do
   @spec sign_in(conn, atom, map) :: conn | error
   defp sign_in(conn, field, %{"sub" => sub} = attrs) do
     if user = Accounts.get_user_by(field, sub) do
-      {:ok, put_session(conn, @current_user_key, user)}
+      {:ok, put_session(conn, @current_user_key, user.id)}
     else
       sign_up(conn, field, attrs)
     end
@@ -39,7 +39,7 @@ defmodule HybridBlogWeb.SessionController do
   @spec sign_up(conn, atom, map) :: conn | error
   defp sign_up(conn, field, %{"sub" => sub} = attrs) do
     with {:ok, user} <- Accounts.create_user(attrs, [{field, sub}]) do
-      {:ok, put_session(conn, @current_user_key, user)}
+      {:ok, put_session(conn, @current_user_key, user.id)}
     end
   end
 
