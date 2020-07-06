@@ -20,3 +20,9 @@ config :hybrid_blog, HybridBlogWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :hybrid_blog, :assent_providers,
+  google: [
+    client_id: "01234567890-a1b2c3defgh45ijk67lmno8pqrst9uv0.apps.googleusercontent.com",
+    client_secret: "a12bcD3EFG_H4ijkl5Mn6OPq"
+  ]
