@@ -67,6 +67,7 @@ defmodule HybridBlogWeb.SessionController do
   @spec config!(atom) :: Assent.Config.t()
   defp config!(provider) do
     Application.fetch_env!(:hybrid_blog, @config_key)[provider]
+    |> Assent.Config.put(:http_adapter, Assent.HTTPAdapter.Mint)
     |> Assent.Config.put(:redirect_uri, redirect_uri(provider))
   end
 

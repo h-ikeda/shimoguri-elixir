@@ -51,7 +51,10 @@ defmodule HybridBlog.MixProject do
       {:distillery, "~> 2.1"},
       {:plug_canonical_host, "~> 2.0"},
       {:floki, "~> 0.26.0", only: :test},
-      {:assent, "~> 0.1.12"}
+      {:assent, "~> 0.1.12"},
+      {:bypass, "~> 1.0", only: :test},
+      {:mint, "~> 1.0"},
+      {:castore, "~> 0.1.6"}
     ]
   end
 
