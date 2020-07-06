@@ -16,14 +16,18 @@ defmodule HybridBlogWeb.SessionControllerTest do
   end
 
   describe "GET /auth/signout" do
-    test "removes current_user ID from session", %{conn: conn} do
-      {:ok, %{id: user_id}} = HybridBlog.Accounts.create_user(%{name: "name", picture: "pict"})
-      conn = conn |> init_test_session(%{current_user: user_id}) |> get("/auth/signout")
+    setup do
+      {:ok, user} = HybridBlog.Accounts.create_user(%{name: "name", picture: "pict"})
+      {:ok, %{user: user}}
+    end
+
+    test "removes current_user ID from session", %{conn: conn, user: user} do
+      conn = conn |> init_test_session(%{current_user: user.id}) |> get("/auth/signout")
       assert get_session(conn, :current_user) == nil
     end
 
-    test "redirects to index page", %{conn: conn} do
-      conn = get(conn, "/auth/signout")
+    test "redirects to index page", %{conn: conn, user: user} do
+      conn = conn |> init_test_session(%{current_user: user.id}) |> get("/auth/signout")
       assert redirected_to(conn) == "/"
     end
   end

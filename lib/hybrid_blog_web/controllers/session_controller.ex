@@ -30,7 +30,7 @@ defmodule HybridBlogWeb.SessionController do
   @spec sign_in(conn, atom, map) :: conn | error
   defp sign_in(conn, field, %{"sub" => sub} = attrs) do
     if user = Accounts.get_user_by(field, sub) do
-      {:ok, put_session(conn, @current_user_key, user.id)}
+      {:ok, sign_in_with(conn, user)}
     else
       sign_up(conn, field, attrs)
     end
@@ -39,8 +39,13 @@ defmodule HybridBlogWeb.SessionController do
   @spec sign_up(conn, atom, map) :: conn | error
   defp sign_up(conn, field, %{"sub" => sub} = attrs) do
     with {:ok, user} <- Accounts.create_user(attrs, [{field, sub}]) do
-      {:ok, put_session(conn, @current_user_key, user.id)}
+      {:ok, sign_in_with(conn, user)}
     end
+  end
+
+  @spec sign_in_with(conn, %Accounts.User{}) :: conn
+  defp sign_in_with(conn, %{id: user_id}) do
+    conn |> put_session(@current_user_key, user_id) |> put_session(:live_socket_id, user_id)
   end
 
   @doc """
@@ -48,6 +53,7 @@ defmodule HybridBlogWeb.SessionController do
   """
   @spec sign_out(conn, params) :: conn
   def sign_out(conn, _params) do
+    HybridBlogWeb.Endpoint.broadcast(get_session(conn, @current_user_key), "disconnect", %{})
     conn |> delete_session(@current_user_key) |> redirect(to: Routes.page_path(conn, :index))
   end
 
