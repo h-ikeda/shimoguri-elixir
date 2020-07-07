@@ -1,9 +1,14 @@
 defmodule HybridBlogWeb.SessionController do
+  @moduledoc """
+  Handles connections around the authentication.
+
+  Session keys:
+  * :current_user_id - a binary of the user ID.
+  * :assent_session_params - a map of session params for the callback validation.
+  * :live_socket_id - when signed in, <user ID>:<random binary>. Otherwise, :<random binary>.
+  """
   use HybridBlogWeb, :controller
   alias HybridBlog.Accounts
-  @config_key :assent_providers
-  @session_params_key :assent_session_params
-  @current_user_key :current_user
   @type conn :: Plug.Conn.t()
   @type params :: Plug.Conn.params()
   @type error :: {:error, Exception.t()}
@@ -23,7 +28,7 @@ defmodule HybridBlogWeb.SessionController do
   @spec process_callback(conn, atom, module, params) :: {:ok, %{user: map}} | error
   defp process_callback(conn, provider, module, params) do
     config!(provider)
-    |> Assent.Config.put(:session_params, get_session(conn, @session_params_key)[provider])
+    |> Assent.Config.put(:session_params, get_session(conn, :assent_session_params)[provider])
     |> module.callback(params)
   end
 
@@ -45,7 +50,11 @@ defmodule HybridBlogWeb.SessionController do
 
   @spec sign_in_with(conn, %Accounts.User{}) :: conn
   defp sign_in_with(conn, %{id: user_id}) do
-    conn |> put_session(@current_user_key, user_id) |> put_session(:live_socket_id, user_id)
+    HybridBlogWeb.Endpoint.broadcast(get_session(conn, :live_socket_id), "disconnect", %{})
+
+    conn
+    |> put_session(:current_user_id, user_id)
+    |> put_session(:live_socket_id, "#{user_id}:#{:crypto.strong_rand_bytes(64)}")
   end
 
   @doc """
@@ -53,8 +62,12 @@ defmodule HybridBlogWeb.SessionController do
   """
   @spec sign_out(conn, params) :: conn
   def sign_out(conn, _params) do
-    HybridBlogWeb.Endpoint.broadcast(get_session(conn, @current_user_key), "disconnect", %{})
-    conn |> delete_session(@current_user_key) |> redirect(to: Routes.page_path(conn, :index))
+    HybridBlogWeb.Endpoint.broadcast(get_session(conn, :live_socket_id), "disconnect", %{})
+
+    conn
+    |> delete_session(:current_user_id)
+    |> put_session(:live_socket_id, ":#{:crypto.strong_rand_bytes(64)}")
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 
   @doc """
@@ -65,14 +78,14 @@ defmodule HybridBlogWeb.SessionController do
     with {:ok, %{url: google_url, session_params: google_session_params}} <-
            Assent.Strategy.Google.authorize_url(config!(:google)) do
       conn
-      |> put_session(@session_params_key, %{google: google_session_params})
+      |> put_session(:assent_session_params, %{google: google_session_params})
       |> json(%{google: google_url})
     end
   end
 
   @spec config!(atom) :: Assent.Config.t()
   defp config!(provider) do
-    Application.fetch_env!(:hybrid_blog, @config_key)[provider]
+    Application.fetch_env!(:hybrid_blog, :assent_providers)[provider]
     |> Assent.Config.put(:http_adapter, Assent.HTTPAdapter.Mint)
     |> Assent.Config.put(:redirect_uri, redirect_uri(provider))
   end

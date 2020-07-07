@@ -1,9 +1,0 @@
-<%= content_tag :button, phx_click: "toggle" do %>
-  <%= img_tag @picture, width: 36, height: 36 %><%= @name %>
-<% end %>
-
-<%= if @menu_open do %>
-  <ul>
-    <li><%= link "Sign out", to: Routes.session_path(@socket, :sign_out) %>
-  </ul>
-<% end %>

@@ -16,12 +16,12 @@ defmodule HybridBlogWeb.SessionLiveTest do
 
   describe "Signing menu" do
     test "shows the sign in / up button", %{conn: conn} do
-      {:ok, _view, html} = live_isolated(conn, SessionLive.SigningMenu)
+      {:ok, _view, html} = live_isolated(conn, SessionLive.Menu)
       assert html =~ "Sign in / Sign up"
     end
 
     test "shows the sign in / up dialog", %{conn: conn} do
-      {:ok, view, _html} = live_isolated(conn, SessionLive.SigningMenu)
+      {:ok, view, _html} = live_isolated(conn, SessionLive.Menu)
 
       assert view |> element("button", "Sign in / Sign up") |> render_click() =~
                "Sign in with Google"
@@ -32,15 +32,15 @@ defmodule HybridBlogWeb.SessionLiveTest do
     setup [:create_user]
 
     test "displays the user picture and name", %{conn: conn, user: user} do
-      conn = conn |> init_test_session(%{current_user: user.id})
-      {:ok, _view, html} = live_isolated(conn, SessionLive.AccountMenu)
+      conn = conn |> init_test_session(%{current_user_id: user.id})
+      {:ok, _view, html} = live_isolated(conn, SessionLive.Menu)
       assert html =~ user.picture
       assert html =~ user.name
     end
 
     test "shows the sign out button", %{conn: conn, user: user} do
-      conn = conn |> init_test_session(%{current_user: user.id})
-      {:ok, view, _html} = live_isolated(conn, SessionLive.AccountMenu)
+      conn = conn |> init_test_session(%{current_user_id: user.id})
+      {:ok, view, _html} = live_isolated(conn, SessionLive.Menu)
 
       assert view |> element("button", user.name) |> render_click() =~
                Routes.session_path(conn, :sign_out)

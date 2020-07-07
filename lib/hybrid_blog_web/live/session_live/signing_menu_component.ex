@@ -1,7 +1,7 @@
-defmodule HybridBlogWeb.SessionLive.SigningMenu do
-  use HybridBlogWeb, :live_view
+defmodule HybridBlogWeb.SessionLive.SigningMenuComponent do
+  use HybridBlogWeb, :live_component
   @impl true
-  def mount(:not_mounted_at_router, _session, socket) do
+  def mount(socket) do
     {:ok, assign(socket, dialog_open: false)}
   end
 

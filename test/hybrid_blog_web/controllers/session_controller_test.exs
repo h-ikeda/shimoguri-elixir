@@ -22,12 +22,12 @@ defmodule HybridBlogWeb.SessionControllerTest do
     end
 
     test "removes current_user ID from session", %{conn: conn, user: user} do
-      conn = conn |> init_test_session(%{current_user: user.id}) |> get("/auth/signout")
+      conn = conn |> init_test_session(%{live_socket_id: user.id}) |> get("/auth/signout")
       assert get_session(conn, :current_user) == nil
     end
 
     test "redirects to index page", %{conn: conn, user: user} do
-      conn = conn |> init_test_session(%{current_user: user.id}) |> get("/auth/signout")
+      conn = conn |> init_test_session(%{live_socket_id: user.id}) |> get("/auth/signout")
       assert redirected_to(conn) == "/"
     end
   end
@@ -68,7 +68,7 @@ defmodule HybridBlogWeb.SessionControllerTest do
         |> get("/auth/google/callback?code=abcde12345&state=rstuv34567")
 
       [user] = HybridBlog.Accounts.list_users()
-      assert get_session(conn, :current_user) == user.id
+      assert get_session(conn, :current_user_id) == user.id
       assert user.name == "John Smith"
 
       assert user.picture ==
@@ -91,7 +91,7 @@ defmodule HybridBlogWeb.SessionControllerTest do
         |> init_test_session(%{assent_session_params: %{google: %{state: "pqrst23456"}}})
         |> get("/auth/google/callback?code=bcdef56789&state=pqrst23456")
 
-      assert get_session(conn, :current_user) == user_id
+      assert get_session(conn, :current_user_id) == user_id
       user = HybridBlog.Accounts.get_user!(user_id)
       assert user.name == "Jane Doe"
 

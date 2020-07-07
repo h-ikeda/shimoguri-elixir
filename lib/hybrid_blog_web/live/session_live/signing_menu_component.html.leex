@@ -1,0 +1,23 @@
+<button phx-click="toggle" phx-target="<%= @myself %>">
+  Sign in / Sign up
+</button>
+
+<aside phx-capture-click="toggle"
+       phx-window-keydown="toggle"
+       phx-key="escape"
+       phx-target="<%= @myself %>"
+       class="<%= if !@dialog_open do %>hidden<% end %>">
+  <%= if @dialog_open do %>
+    <div class="phx-modal-content"
+         phx-hook="authorize">
+      <button class="phx-modal-close"
+              phx-click="toggle"
+              phx-target="<%= @myself %>">
+        &times;
+      </button>
+      <ul>
+        <li><a class="google">Sign in with Google</a>
+      </ul>
+    </div>
+  <% end %>
+</aside>
