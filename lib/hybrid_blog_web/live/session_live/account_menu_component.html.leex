@@ -1,5 +1,5 @@
 <%= content_tag :button, phx_click: "toggle", phx_target: @myself do %>
-  <%= img_tag @current_user.picture, width: 36, height: 36 %><%= @current_user.name %>
+  <%= img_tag @picture, width: 36, height: 36 %><%= @name %>
 <% end %>
 
 <ul class="<%= if !@menu_open do %>hidden<% end %>">

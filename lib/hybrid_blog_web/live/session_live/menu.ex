@@ -3,20 +3,20 @@ defmodule HybridBlogWeb.SessionLive.Menu do
   alias HybridBlog.Accounts
   @impl true
   def mount(:not_mounted_at_router, %{"current_user_id" => current_user_id}, socket) do
-    current_user = Accounts.get_user!(current_user_id)
+    %{name: name, picture: picture} = Accounts.get_user!(current_user_id)
     if connected?(socket), do: HybridBlogWeb.Endpoint.subscribe("user:#{current_user_id}")
-    {:ok, assign(socket, current_user: current_user)}
+    {:ok, assign(socket, user_id: current_user_id, name: name, picture: picture)}
   end
 
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, assign(socket, current_user: nil)}
+    {:ok, assign(socket, user_id: nil)}
   end
 
   @impl true
   def handle_info(
-        %{topic: "user:" <> current_user_id, event: "change", payload: attrs},
-        %{assigns: %{current_user: %{id: current_user_id} = current_user}} = socket
+        %{topic: "user:" <> user_id, event: "change", payload: attrs},
+        %{assigns: %{user_id: user_id}} = socket
       ) do
-    {:noreply, assign(socket, current_user: Map.merge(current_user, attrs))}
+    {:noreply, assign(socket, attrs)}
   end
 end
