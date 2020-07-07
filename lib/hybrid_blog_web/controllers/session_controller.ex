@@ -5,7 +5,7 @@ defmodule HybridBlogWeb.SessionController do
   Session keys:
   * :current_user_id - a binary of the user ID.
   * :assent_session_params - a map of session params for the callback validation.
-  * :live_socket_id - when signed in, <user ID>:<random binary>. Otherwise, :<random binary>.
+  * :live_socket_id - when signed in, "users_socket:<user ID>".
   """
   use HybridBlogWeb, :controller
   alias HybridBlog.Accounts
@@ -50,11 +50,9 @@ defmodule HybridBlogWeb.SessionController do
 
   @spec sign_in_with(conn, %Accounts.User{}) :: conn
   defp sign_in_with(conn, %{id: user_id}) do
-    HybridBlogWeb.Endpoint.broadcast(get_session(conn, :live_socket_id), "disconnect", %{})
-
     conn
     |> put_session(:current_user_id, user_id)
-    |> put_session(:live_socket_id, "#{user_id}:#{:crypto.strong_rand_bytes(64)}")
+    |> put_session(:live_socket_id, "users_socket:#{user_id}")
   end
 
   @doc """
@@ -62,11 +60,13 @@ defmodule HybridBlogWeb.SessionController do
   """
   @spec sign_out(conn, params) :: conn
   def sign_out(conn, _params) do
-    HybridBlogWeb.Endpoint.broadcast(get_session(conn, :live_socket_id), "disconnect", %{})
+    if current_user_id = get_session(conn, :current_user_id) do
+      HybridBlogWeb.Endpoint.broadcast("users_socket:#{current_user_id}", "disconnect", %{})
+    end
 
     conn
     |> delete_session(:current_user_id)
-    |> put_session(:live_socket_id, ":#{:crypto.strong_rand_bytes(64)}")
+    |> delete_session(:live_socket_id)
     |> redirect(to: Routes.page_path(conn, :index))
   end
 

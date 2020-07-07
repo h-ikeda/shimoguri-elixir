@@ -4,7 +4,6 @@ defmodule HybridBlogWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :put_live_socket_id
     plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
@@ -49,14 +48,6 @@ defmodule HybridBlogWeb.Router do
     scope "/" do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: HybridBlogWeb.Telemetry
-    end
-  end
-
-  defp put_live_socket_id(conn, _options) do
-    if get_session(conn, :live_socket_id) do
-      conn
-    else
-      conn |> put_session(:live_socket_id, ":#{:crypto.strong_rand_bytes(64)}")
     end
   end
 end
