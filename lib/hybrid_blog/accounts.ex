@@ -139,6 +139,18 @@ defmodule HybridBlog.Accounts do
   end
 
   @doc """
+  Gets permissions given to the User.
+  """
+  @spec permissions(%User{}) :: MapSet.t(binary)
+  def permissions(%User{roles: []}), do: MapSet.new()
+
+  def permissions(%User{roles: roles}) do
+    roles
+    |> Enum.map(&MapSet.new(&1.permissions))
+    |> Enum.reduce(&MapSet.union/2)
+  end
+
+  @doc """
   Returns the list of roles.
 
   ## Examples

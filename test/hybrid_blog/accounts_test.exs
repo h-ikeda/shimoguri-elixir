@@ -81,13 +81,29 @@ defmodule HybridBlog.AccountsTest do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
+
+    test "permissions/1 returns a MapSet of permissions" do
+      role = role_fixture()
+
+      assert {:ok, user} =
+               user_fixture()
+               |> Repo.preload(:roles)
+               |> Accounts.update_user(%{"roles" => [role.id]})
+
+      assert Accounts.permissions(user) == MapSet.new(["list_users"])
+    end
+
+    test "permissions/1 returns a empty MapSet when the user has no roles" do
+      user = user_fixture() |> Repo.preload(:roles)
+      assert Accounts.permissions(user) == MapSet.new()
+    end
   end
 
   describe "roles" do
     alias HybridBlog.Accounts.Role
 
-    @valid_attrs %{name: "some name", permissions: []}
-    @update_attrs %{name: "some updated name", permissions: []}
+    @valid_attrs %{name: "some name", permissions: ["list_users"]}
+    @update_attrs %{name: "some updated name", permissions: ["edit_users"]}
     @invalid_attrs %{name: nil, permissions: nil}
 
     def role_fixture(attrs \\ %{}) do
@@ -112,7 +128,7 @@ defmodule HybridBlog.AccountsTest do
     test "create_role/1 with valid data creates a role" do
       assert {:ok, %Role{} = role} = Accounts.create_role(@valid_attrs)
       assert role.name == "some name"
-      assert role.permissions == []
+      assert role.permissions == ["list_users"]
     end
 
     test "create_role/1 with invalid data returns error changeset" do
@@ -123,7 +139,7 @@ defmodule HybridBlog.AccountsTest do
       role = role_fixture()
       assert {:ok, %Role{} = role} = Accounts.update_role(role, @update_attrs)
       assert role.name == "some updated name"
-      assert role.permissions == []
+      assert role.permissions == ["edit_users"]
     end
 
     test "update_role/2 with invalid data returns error changeset" do
