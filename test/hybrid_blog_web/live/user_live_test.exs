@@ -22,13 +22,15 @@ defmodule HybridBlogWeb.UserLiveTest do
   describe "Index" do
     setup [:create_user]
 
-    test "lists all users", %{conn: conn} do
+    test "lists all users", %{conn: conn, user: user} do
+      conn = init_test_session(conn, %{current_user_id: user.id})
       {:ok, _index_live, html} = live(conn, Routes.user_index_path(conn, :index))
 
       assert html =~ "Listing Users"
     end
 
-    test "saves new user", %{conn: conn} do
+    test "saves new user", %{conn: conn, user: user} do
+      conn = init_test_session(conn, %{current_user_id: user.id})
       {:ok, index_live, _html} = live(conn, Routes.user_index_path(conn, :index))
 
       assert index_live |> element("a", "New User") |> render_click() =~
@@ -50,6 +52,7 @@ defmodule HybridBlogWeb.UserLiveTest do
     end
 
     test "updates user in listing", %{conn: conn, user: user} do
+      conn = init_test_session(conn, %{current_user_id: user.id})
       {:ok, index_live, _html} = live(conn, Routes.user_index_path(conn, :index))
 
       assert index_live |> element("#user-#{user.id} a", "Edit") |> render_click() =~
@@ -71,6 +74,7 @@ defmodule HybridBlogWeb.UserLiveTest do
     end
 
     test "deletes user in listing", %{conn: conn, user: user} do
+      conn = init_test_session(conn, %{current_user_id: user.id})
       {:ok, index_live, _html} = live(conn, Routes.user_index_path(conn, :index))
 
       assert index_live |> element("#user-#{user.id} a", "Delete") |> render_click()

@@ -1,0 +1,27 @@
+<h1>Show Role</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, HybridBlogWeb.RoleLive.FormComponent,
+    id: @role.id,
+    title: @page_title,
+    action: @live_action,
+    role: @role,
+    return_to: Routes.role_show_path(@socket, :show, @role) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @role.name %>
+  </li>
+
+  <li>
+    <strong>Permissions:</strong>
+    <%= @role.permissions %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.role_show_path(@socket, :edit, @role), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.role_index_path(@socket, :index) %></span>

@@ -14,6 +14,7 @@
     <tr>
       <th>Name</th>
       <th>Picture</th>
+      <th>Roles</th>
 
       <th></th>
     </tr>
@@ -23,6 +24,7 @@
       <tr id="user-<%= user.id %>">
         <td><%= user.name %></td>
         <td><%= user.picture %></td>
+        <td><%= Enum.map_join(user.roles, ", ", &(&1.name)) %></td>
 
         <td>
           <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>

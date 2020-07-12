@@ -21,6 +21,11 @@
     <%= @user.picture %>
   </li>
 
+  <li>
+    <strong>Roles:</strong>
+    <%= Enum.map_join(@user.roles, ", ", &(&1.name)) %>
+  </li>
+
 </ul>
 
 <span><%= live_patch "Edit", to: Routes.user_show_path(@socket, :edit, @user), class: "button" %></span>

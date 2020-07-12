@@ -1,4 +1,4 @@
-defmodule HybridBlogWeb.UserLive.Show do
+defmodule HybridBlogWeb.RoleLive.Show do
   use HybridBlogWeb, :live_view
 
   alias HybridBlog.Accounts
@@ -13,9 +13,9 @@ defmodule HybridBlogWeb.UserLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:user, Accounts.get_user_with_roles!(id))}
+     |> assign(:role, Accounts.get_role!(id))}
   end
 
-  defp page_title(:show), do: "Show User"
-  defp page_title(:edit), do: "Edit User"
+  defp page_title(:show), do: "Show Role"
+  defp page_title(:edit), do: "Edit Role"
 end

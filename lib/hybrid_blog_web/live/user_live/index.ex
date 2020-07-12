@@ -5,8 +5,10 @@ defmodule HybridBlogWeb.UserLive.Index do
   alias HybridBlog.Accounts.User
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :users, list_users())}
+  def mount(_params, session, socket) do
+    with :ok <- ensure_authenticated(session, socket) do
+      {:ok, assign(socket, :users, list_users())}
+    end
   end
 
   @impl true
@@ -17,13 +19,13 @@ defmodule HybridBlogWeb.UserLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit User")
-    |> assign(:user, Accounts.get_user!(id))
+    |> assign(:user, Accounts.get_user_with_roles!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New User")
-    |> assign(:user, %User{})
+    |> assign(:user, %User{roles: []})
   end
 
   defp apply_action(socket, :index, _params) do

@@ -1,7 +1,7 @@
 <h2><%= @title %></h2>
 
 <%= f = form_for @changeset, "#",
-  id: "user-form",
+  id: "role-form",
   phx_target: @myself,
   phx_change: "validate",
   phx_submit: "save" %>
@@ -10,13 +10,9 @@
   <%= text_input f, :name %>
   <%= error_tag f, :name %>
 
-  <%= label f, :picture %>
-  <%= text_input f, :picture %>
-  <%= error_tag f, :picture %>
-
-  <%= label f, :roles %>
-  <%= multiple_select f, :roles, @roles, selected: Enum.map(@user.roles, &(&1.id)) %>
-  <%= error_tag f, :roles %>
+  <%= label f, :permissions %>
+  <%= multiple_select f, :permissions, HybridBlog.Accounts.Role.permissions() %>
+  <%= error_tag f, :permissions %>
 
   <%= submit "Save", phx_disable_with: "Saving..." %>
 </form>

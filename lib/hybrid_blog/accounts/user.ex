@@ -10,6 +10,8 @@ defmodule HybridBlog.Accounts.User do
     field :google_sub, :binary
 
     timestamps()
+
+    many_to_many :roles, HybridBlog.Accounts.Role, join_through: "users_roles", on_replace: :delete
   end
 
   @doc false

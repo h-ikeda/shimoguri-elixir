@@ -24,6 +24,11 @@ defmodule HybridBlogWeb.Router do
     live "/users/edit/:id", UserLive.Index, :edit
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/edit", UserLive.Show, :edit
+    live "/roles", RoleLive.Index, :index
+    live "/roles/new", RoleLive.Index, :new
+    live "/roles/:id/edit", RoleLive.Index, :edit
+    live "/roles/:id", RoleLive.Show, :show
+    live "/roles/:id/show/edit", RoleLive.Show, :edit
     get "/auth/:provider/callback", SessionController, :callback
     get "/auth/signout", SessionController, :sign_out
   end
