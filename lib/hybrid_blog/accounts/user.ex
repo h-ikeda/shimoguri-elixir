@@ -11,7 +11,9 @@ defmodule HybridBlog.Accounts.User do
 
     timestamps()
 
-    many_to_many :roles, HybridBlog.Accounts.Role, join_through: "users_roles", on_replace: :delete
+    many_to_many :roles, HybridBlog.Accounts.Role,
+      join_through: "users_roles",
+      on_replace: :delete
   end
 
   @doc false
