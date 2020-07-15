@@ -6,7 +6,8 @@
     title: @page_title,
     action: @live_action,
     role: @role,
-    return_to: Routes.role_show_path(@socket, :show, @role) %>
+    return_to: Routes.role_show_path(@socket, :show, @role),
+    current_user: @current_user %>
 <% end %>
 
 <ul>
@@ -18,7 +19,7 @@
 
   <li>
     <strong>Permissions:</strong>
-    <%= @role.permissions %>
+    <%= Enum.join(@role.permissions, ", ") %>
   </li>
 
 </ul>

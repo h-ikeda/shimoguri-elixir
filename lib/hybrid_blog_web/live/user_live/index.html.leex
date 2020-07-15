@@ -6,7 +6,8 @@
     title: @page_title,
     action: @live_action,
     user: @user,
-    return_to: Routes.user_index_path(@socket, :index) %>
+    return_to: Routes.user_index_path(@socket, :index),
+    current_user: @current_user %>
 <% end %>
 
 <table>
@@ -35,5 +36,3 @@
     <% end %>
   </tbody>
 </table>
-
-<span><%= live_patch "New User", to: Routes.user_index_path(@socket, :new) %></span>

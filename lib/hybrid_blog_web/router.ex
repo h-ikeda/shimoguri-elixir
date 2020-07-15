@@ -8,6 +8,7 @@ defmodule HybridBlogWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :put_root_layout, {HybridBlogWeb.LayoutView, :root}
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -20,7 +21,6 @@ defmodule HybridBlogWeb.Router do
 
     get "/", PageController, :index
     live "/users", UserLive.Index, :index
-    live "/users/new", UserLive.Index, :new
     live "/users/edit/:id", UserLive.Index, :edit
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/edit", UserLive.Show, :edit
@@ -53,6 +53,14 @@ defmodule HybridBlogWeb.Router do
     scope "/" do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: HybridBlogWeb.Telemetry
+    end
+  end
+
+  defp fetch_current_user(conn, _options) do
+    if current_user_id = get_session(conn, :current_user_id) do
+      assign(conn, :current_user, HybridBlog.Accounts.get_user_with_roles!(current_user_id))
+    else
+      conn
     end
   end
 end

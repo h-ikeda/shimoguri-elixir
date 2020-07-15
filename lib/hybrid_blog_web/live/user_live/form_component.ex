@@ -5,8 +5,7 @@ defmodule HybridBlogWeb.UserLive.FormComponent do
 
   @impl true
   def mount(socket) do
-    roles = Accounts.list_roles() |> Enum.map(&{&1.name, &1.id})
-    {:ok, assign(socket, roles: roles)}
+    {:ok, assign(socket, :roles, Accounts.list_roles() |> Enum.map(&{&1.name, &1.id}))}
   end
 
   @impl true
@@ -16,7 +15,8 @@ defmodule HybridBlogWeb.UserLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:changeset, changeset)
+     |> assign(:disable_roles, ensure_permitted(assigns, "edit_user_roles") != :ok)}
   end
 
   @impl true
@@ -33,24 +33,37 @@ defmodule HybridBlogWeb.UserLive.FormComponent do
     save_user(socket, socket.assigns.action, user_params)
   end
 
+  defp ensure_current_user?(%{current_user: %{id: id}, id: id}), do: true
+  defp ensure_current_user?(_socket), do: false
+
   defp save_user(socket, :edit, %{"roles" => _} = user_params) do
-    case Accounts.update_user(socket.assigns.user, user_params) do
-      {:ok, user} ->
-        :ok =
-          HybridBlogWeb.Endpoint.broadcast_from(
-            self(),
-            "user:#{user.id}",
-            "change",
-            Map.take(user, [:name, :picture])
-          )
+    user_params =
+      case ensure_permitted(socket.assigns, "edit_user_roles") do
+        :ok -> user_params
+        {:error, _} -> Map.delete(user_params, "roles")
+      end
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "User updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+    with true <-
+           ensure_current_user?(socket) || ensure_permitted(socket.assigns, "edit_users") == :ok,
+         {:ok, user} <- Accounts.update_user(socket.assigns.user, user_params) do
+      :ok =
+        HybridBlogWeb.Endpoint.broadcast_from(
+          self(),
+          "user:#{user.id}",
+          "change",
+          Map.take(user, [:name, :picture])
+        )
 
+      {:noreply,
+       socket
+       |> put_flash(:info, "User updated successfully")
+       |> push_redirect(to: socket.assigns.return_to)}
+    else
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
+
+      false ->
+        {:noreply, push_redirect(socket, to: socket.assigns.return_to)}
     end
   end
 
@@ -59,15 +72,15 @@ defmodule HybridBlogWeb.UserLive.FormComponent do
   end
 
   defp save_user(socket, :new, user_params) do
-    case Accounts.create_user(user_params) do
-      {:ok, _user} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "User created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+    with :ok <- ensure_permitted(socket.assigns, "create_users"),
+         {:ok, _user} <- Accounts.create_user(user_params) do
+      {:noreply,
+       socket
+       |> put_flash(:info, "User created successfully")
+       |> push_redirect(to: socket.assigns.return_to)}
+    else
+      {:error, %Ecto.Changeset{} = changeset} -> {:noreply, assign(socket, changeset: changeset)}
+      {:error, _} -> {:noreply, push_redirect(socket, to: socket.assigns.return_to)}
     end
   end
 end

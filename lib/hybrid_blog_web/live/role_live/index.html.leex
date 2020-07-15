@@ -6,7 +6,8 @@
     title: @page_title,
     action: @live_action,
     role: @role,
-    return_to: Routes.role_index_path(@socket, :index) %>
+    return_to: Routes.role_index_path(@socket, :index),
+    current_user: @current_user %>
 <% end %>
 
 <table>

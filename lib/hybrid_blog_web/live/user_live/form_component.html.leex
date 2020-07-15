@@ -15,7 +15,7 @@
   <%= error_tag f, :picture %>
 
   <%= label f, :roles %>
-  <%= multiple_select f, :roles, @roles, selected: Enum.map(@user.roles, &(&1.id)) %>
+  <%= multiple_select f, :roles, @roles, selected: Enum.map(@user.roles, &(&1.id)), disabled: @disable_roles %>
   <%= error_tag f, :roles %>
 
   <%= submit "Save", phx_disable_with: "Saving..." %>

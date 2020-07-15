@@ -21,6 +21,7 @@ defmodule HybridBlog.Accounts.Role do
     [
       "list_users",
       "edit_users",
+      "edit_user_roles",
       "delete_users",
       "list_roles",
       "create_roles",

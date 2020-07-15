@@ -4,8 +4,13 @@ defmodule HybridBlogWeb.RoleLive.Show do
   alias HybridBlog.Accounts
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(_params, session, socket) do
+    socket = assign_current_user(socket, session)
+
+    case ensure_permitted(socket.assigns, "list_roles") do
+      :ok -> {:ok, socket}
+      {:error, _} -> {:ok, redirect(socket, to: Routes.page_path(socket, :index))}
+    end
   end
 
   @impl true

@@ -28,28 +28,28 @@ defmodule HybridBlogWeb.RoleLive.FormComponent do
   end
 
   defp save_role(socket, :edit, %{"permissions" => _} = role_params) do
-    case Accounts.update_role(socket.assigns.role, role_params) do
-      {:ok, _role} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Role updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+    with :ok <- ensure_permitted(socket.assigns, "edit_roles"),
+         {:ok, _role} <- Accounts.update_role(socket.assigns.role, role_params) do
+      {:noreply,
+       socket
+       |> put_flash(:info, "Role updated successfully")
+       |> push_redirect(to: socket.assigns.return_to)}
+    else
+      {:error, %Ecto.Changeset{} = changeset} -> {:noreply, assign(socket, :changeset, changeset)}
+      {:error, _} -> {:noreply, push_redirect(socket, to: socket.assigns.return_to)}
     end
   end
 
   defp save_role(socket, :new, %{"permissions" => _} = role_params) do
-    case Accounts.create_role(role_params) do
-      {:ok, _role} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Role created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+    with :ok <- ensure_permitted(socket.assigns, "create_roles"),
+         {:ok, _role} <- Accounts.create_role(role_params) do
+      {:noreply,
+       socket
+       |> put_flash(:info, "Role created successfully")
+       |> push_redirect(to: socket.assigns.return_to)}
+    else
+      {:error, %Ecto.Changeset{} = changeset} -> {:noreply, assign(socket, changeset: changeset)}
+      {:error, _} -> {:noreply, push_redirect(socket, to: socket.assigns.return_to)}
     end
   end
 

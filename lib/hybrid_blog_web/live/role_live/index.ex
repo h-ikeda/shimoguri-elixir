@@ -5,8 +5,13 @@ defmodule HybridBlogWeb.RoleLive.Index do
   alias HybridBlog.Accounts.Role
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :roles, list_roles())}
+  def mount(_params, session, socket) do
+    socket = assign_current_user(socket, session)
+
+    case ensure_permitted(socket.assigns, "list_roles") do
+      :ok -> {:ok, assign(socket, :roles, list_roles())}
+      {:error, _} -> {:ok, redirect(socket, to: Routes.page_path(socket, :index))}
+    end
   end
 
   @impl true
@@ -34,10 +39,16 @@ defmodule HybridBlogWeb.RoleLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    role = Accounts.get_role!(id)
-    {:ok, _} = Accounts.delete_role(role)
+    case ensure_permitted(socket.assigns, "delete_roles") do
+      :ok ->
+        role = Accounts.get_role!(id)
+        {:ok, _} = Accounts.delete_role(role)
 
-    {:noreply, assign(socket, :roles, list_roles())}
+        {:noreply, assign(socket, :roles, list_roles())}
+
+      {:error, _} ->
+        {:noreply, socket}
+    end
   end
 
   defp list_roles do
