@@ -181,8 +181,7 @@ defmodule HybridBlogWeb.UserLiveTest do
     end
 
     test "updates user within modal", %{conn: conn, user: user} do
-      {:ok, role} =
-        Accounts.create_role(%{name: "User role", permissions: ["edit_users"]})
+      {:ok, role} = Accounts.create_role(%{name: "User role", permissions: ["edit_users"]})
 
       {:ok, user} =
         Accounts.update_user(HybridBlog.Repo.preload(user, :roles), %{"roles" => [role.id]})
