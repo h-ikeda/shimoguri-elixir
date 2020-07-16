@@ -30,7 +30,7 @@ defmodule HybridBlogWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :hybrid_blog,
-    gzip: false,
+    gzip: Mix.env() == :prod,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
