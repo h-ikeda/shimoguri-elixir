@@ -49,5 +49,12 @@ end
 release :hybrid_blog do
   set(version: current_version(:hybrid_blog))
   set(applications: [:runtime_tools])
-  set(commands: [migrate: "rel/commands/migrate.sh", rollback: "rel/commands/rollback.sh"])
+
+  set(
+    commands: [
+      migrate: "rel/commands/migrate.sh",
+      rollback: "rel/commands/rollback.sh",
+      authorize_first_user: "rel/commands/authorize_first_user.sh"
+    ]
+  )
 end
