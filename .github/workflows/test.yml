@@ -42,3 +42,26 @@ jobs:
           elixir-version: '1.10.3'
       - run: mix deps.get
       - run: mix test
+
+  release:
+    runs-on: ubuntu-latest
+
+    needs:
+      - format
+      - test
+
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: '22.3.2'
+          elixir-version: '1.10.3'
+      - id: latest
+        run: echo '::set-output name=version::`mix run -e "IO.puts Mix.Project.config[:version]" --no-archives-check --no-deps-check --no-compile --no-start`'
+      - run: git checkout master
+      - id: current
+        run: echo '::set-output name=version::`mix run -e "IO.puts Mix.Project.config[:version]" --no-archives-check --no-deps-check --no-compile --no-start`'
+      - if: steps.latest.outputs.version != steps.current.outputs.version
+        run: git merge dev && git push
