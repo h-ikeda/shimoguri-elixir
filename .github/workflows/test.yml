@@ -1,7 +1,6 @@
 on:
   push:
     branches:
-      - master
       - dev
   pull_request:
     branches:
@@ -44,23 +43,25 @@ jobs:
       - run: mix deps.get
       - run: mix test
 
-  deploy:
+  release:
     runs-on: ubuntu-latest
-
-    if: github.ref == 'refs/heads/master'
 
     needs:
       - format
       - test
 
+    if: github.ref == 'refs/heads/dev'
+
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
         with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3'
-      - run: pip install gigalixir --ignore-installed six
-      - run: gigalixir login -y -e '${{ secrets.GIGALIXIR_EMAIL }}' -p '${{ secrets.GIGALIXIR_PASSWORD }}'
-      - run: gigalixir git:remote ${{ secrets.GIGALIXIR_APPNAME }}
-      - run: 'git -c http.extraheader="GIGALIXIR-HOT: true" push gigalixir'
+          otp-version: '22.3.2'
+          elixir-version: '1.10.3'
+      - id: latest
+        run: echo '::set-output name=version::`mix run -e "IO.puts Mix.Project.config[:version]" --no-archives-check --no-deps-check --no-compile --no-start`'
+      - run: git fetch && git checkout master
+      - id: current
+        run: echo '::set-output name=version::`mix run -e "IO.puts Mix.Project.config[:version]" --no-archives-check --no-deps-check --no-compile --no-start`'
+      - if: steps.latest.outputs.version != steps.current.outputs.version
+        run: git merge dev && git push
