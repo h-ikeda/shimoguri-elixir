@@ -1,7 +1,6 @@
 on:
   push:
     branches:
-      - master
       - dev
   pull_request:
     branches:
@@ -43,24 +42,3 @@ jobs:
           elixir-version: '1.10.3'
       - run: mix deps.get
       - run: mix test
-
-  deploy:
-    runs-on: ubuntu-latest
-
-    if: github.ref == 'refs/heads/master'
-
-    needs:
-      - format
-      - test
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3'
-      - run: pip install gigalixir --ignore-installed six
-      - run: gigalixir login -y -e '${{ secrets.GIGALIXIR_EMAIL }}' -p '${{ secrets.GIGALIXIR_PASSWORD }}'
-      - run: gigalixir git:remote ${{ secrets.GIGALIXIR_APPNAME }}
-      - run: git push gigalixir
