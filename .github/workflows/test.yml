@@ -16,6 +16,12 @@ jobs:
         with:
           otp-version: '22.3.2'
           elixir-version: '1.10.3'
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-hex-${{ hashFiles('mix.lock') }}
+          restore-keys: 
+            - ${{ runner.os }}-hex-
       - run: mix deps.get
       - run: mix format --check-formatted
 
@@ -40,6 +46,18 @@ jobs:
         with:
           otp-version: '22.3.2'
           elixir-version: '1.10.3'
+      - uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-hex-${{ hashFiles('mix.lock') }}
+          restore-keys: 
+            - ${{ runner.os }}-hex-
+      - uses: actions/cache@v2
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ hashFiles('lib/**') }}
+          restore-keys:
+            - ${{ runner.os }}-build-
       - run: mix deps.get
       - run: mix test
 
