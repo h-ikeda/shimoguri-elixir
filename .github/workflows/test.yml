@@ -59,9 +59,9 @@ jobs:
           otp-version: '22.3.2'
           elixir-version: '1.10.3'
       - id: latest
-        run: echo '::set-output name=version::`mix run -e "IO.puts Mix.Project.config[:version]" --no-archives-check --no-deps-check --no-compile --no-start`'
+        run: echo "::set-output name=version::`mix run -e 'IO.puts Mix.Project.config[:version]' --no-archives-check --no-deps-check --no-compile --no-start`"
       - run: git fetch && git checkout master
       - id: current
-        run: echo '::set-output name=version::`mix run -e "IO.puts Mix.Project.config[:version]" --no-archives-check --no-deps-check --no-compile --no-start`'
+        run: echo "::set-output name=version::`mix run -e 'IO.puts Mix.Project.config[:version]' --no-archives-check --no-deps-check --no-compile --no-start`"
       - if: steps.latest.outputs.version != steps.current.outputs.version
         run: git merge dev && git push
