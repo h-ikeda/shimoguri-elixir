@@ -20,8 +20,8 @@ jobs:
         with:
           path: deps
           key: ${{ runner.os }}-hex-${{ hashFiles('mix.lock') }}
-          restore-keys: 
-            - ${{ runner.os }}-hex-
+          restore-keys: |
+            ${{ runner.os }}-hex-
       - run: mix deps.get
       - run: mix format --check-formatted
 
@@ -50,14 +50,14 @@ jobs:
         with:
           path: deps
           key: ${{ runner.os }}-hex-${{ hashFiles('mix.lock') }}
-          restore-keys: 
-            - ${{ runner.os }}-hex-
+          restore-keys: |
+            ${{ runner.os }}-hex-
       - uses: actions/cache@v2
         with:
           path: _build
           key: ${{ runner.os }}-build-${{ hashFiles('lib/**') }}
-          restore-keys:
-            - ${{ runner.os }}-build-
+          restore-keys: |
+            ${{ runner.os }}-build-
       - run: mix deps.get
       - run: mix test
 
