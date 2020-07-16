@@ -54,6 +54,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-elixir@v1
         with:
           otp-version: '22.3.2'
