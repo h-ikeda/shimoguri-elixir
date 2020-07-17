@@ -177,6 +177,14 @@ defmodule HybridBlog.AccountsTest do
       assert role.name == name
     end
 
+    test "create_role/1 with duplicated permissions deduplicates permissions" do
+      name = unique_role_name()
+      permissions = random_role_permissions()
+      duplicated = permissions |> List.duplicate(2) |> List.flatten()
+      assert {:ok, %Role{} = role} = Accounts.create_role(%{name: name, permissions: duplicated})
+      assert role.permissions == permissions
+    end
+
     test "create_role/1 with empty name returns error changeset" do
       assert {:error, %Ecto.Changeset{}} =
                Accounts.create_role(%{name: "", permissions: random_role_permissions()})
@@ -220,6 +228,18 @@ defmodule HybridBlog.AccountsTest do
                Accounts.update_role(role, %{name: name, permissions: permissions})
 
       assert role == Accounts.get_role!(role.id)
+    end
+
+    test "update_role/2 with duplicated permissions deduplicates permissions" do
+      role = insert!(:role)
+      name = unique_role_name()
+      permissions = random_role_permissions()
+      duplicated = permissions |> List.duplicate(2) |> List.flatten()
+
+      assert {:ok, %Role{} = role} =
+               Accounts.update_role(role, %{name: name, permissions: duplicated})
+
+      assert role.permissions == permissions
     end
 
     test "delete_role/1 deletes the role" do
