@@ -18,7 +18,7 @@ defmodule HybridBlog.Release do
 
   def authorize_first_user(_argv) do
     {:ok, _} = Application.ensure_all_started(:ssl)
-    :ok = Application.load(@app)
+    :ok = Application.ensure_loaded(@app)
 
     {:ok, _, _} =
       Ecto.Migrator.with_repo(HybridBlog.Repo, fn repo ->
