@@ -13,7 +13,7 @@ defmodule HybridBlog.Accounts.Role do
   def changeset(role, attrs) do
     role
     |> cast(attrs, [:name, :permissions])
-    |> validate_required([:name, :permissions])
+    |> validate_required([:name])
     |> validate_subset(:permissions, permissions())
   end
 
