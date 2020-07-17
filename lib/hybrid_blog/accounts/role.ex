@@ -13,8 +13,9 @@ defmodule HybridBlog.Accounts.Role do
   def changeset(role, attrs) do
     role
     |> cast(attrs, [:name, :permissions])
-    |> validate_required([:name, :permissions])
+    |> validate_required([:name])
     |> validate_subset(:permissions, permissions())
+    |> update_change(:permissions, &Enum.uniq/1)
   end
 
   def permissions do

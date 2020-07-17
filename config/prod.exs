@@ -10,7 +10,6 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :hybrid_blog, HybridBlogWeb.Endpoint,
-  url: [host: "www.hodono.tk", port: 443, scheme: "https"],
   cache_static_manifest: "priv/static/cache_manifest.json",
   version: Application.spec(:phoenix_distillery, :vsn)
 

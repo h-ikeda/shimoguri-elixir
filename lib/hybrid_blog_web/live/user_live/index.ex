@@ -2,7 +2,6 @@ defmodule HybridBlogWeb.UserLive.Index do
   use HybridBlogWeb, :live_view
 
   alias HybridBlog.Accounts
-  alias HybridBlog.Accounts.User
 
   @impl true
   def mount(_params, session, socket) do

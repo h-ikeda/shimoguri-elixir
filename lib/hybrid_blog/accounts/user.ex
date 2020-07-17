@@ -21,5 +21,10 @@ defmodule HybridBlog.Accounts.User do
     user
     |> cast(attrs, [:name, :picture])
     |> validate_required([:name, :picture])
+    |> put_roles(attrs)
   end
+
+  defp put_roles(user, %{roles: roles}) when is_list(roles), do: put_assoc(user, :roles, roles)
+  defp put_roles(user, %{"roles" => roles}), do: put_roles(user, %{roles: roles})
+  defp put_roles(user, _), do: user
 end

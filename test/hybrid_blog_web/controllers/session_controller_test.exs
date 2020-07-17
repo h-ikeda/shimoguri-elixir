@@ -1,5 +1,6 @@
 defmodule HybridBlogWeb.SessionControllerTest do
   use HybridBlogWeb.ConnCase
+  import HybridBlog.Factory
 
   describe "GET /api/authorize_url" do
     test "returns a JSON containing authorize URLs", %{conn: conn} do
@@ -17,8 +18,7 @@ defmodule HybridBlogWeb.SessionControllerTest do
 
   describe "GET /auth/signout" do
     setup do
-      {:ok, user} = HybridBlog.Accounts.create_user(%{name: "name", picture: "pict"})
-      {:ok, %{user: user}}
+      {:ok, %{user: insert!(:user)}}
     end
 
     test "removes current_user ID from session", %{conn: conn, user: user} do

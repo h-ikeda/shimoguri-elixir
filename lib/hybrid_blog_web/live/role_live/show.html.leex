@@ -19,7 +19,7 @@
 
   <li>
     <strong>Permissions:</strong>
-    <%= Enum.join(@role.permissions, ", ") %>
+    <%= @role.permissions && Enum.join(@role.permissions, ", ") %>
   </li>
 
 </ul>
