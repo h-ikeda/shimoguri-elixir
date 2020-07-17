@@ -156,6 +156,16 @@ defmodule HybridBlog.AccountsTest do
       assert Accounts.get_role!(role.id) == role
     end
 
+    test "get_roles/1 returns the roles specified by IDs" do
+      role1 = insert!(:role)
+      insert!(:role)
+      insert!(:role)
+      role2 = insert!(:role)
+      role3 = insert!(:role)
+      insert!(:role)
+      assert Accounts.get_roles([role1.id, role2.id, role3.id]) == [role1, role2, role3]
+    end
+
     test "create_role/1 creates a role" do
       name = unique_role_name()
       permissions = random_role_permissions()

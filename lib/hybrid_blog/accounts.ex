@@ -91,6 +91,12 @@ defmodule HybridBlog.Accounts do
   def get_role!(id), do: Repo.get!(Role, id)
 
   @doc """
+  Gets the list of roles specified by IDs.
+  """
+  @spec get_roles([integer]) :: [role]
+  def get_roles(ids), do: Repo.all(from role in Role, where: role.id in ^ids)
+
+  @doc """
   Creates a role.
   """
   @spec create_role(map) :: {:ok, role} | {:error, Ecto.Changeset.t(role)}
