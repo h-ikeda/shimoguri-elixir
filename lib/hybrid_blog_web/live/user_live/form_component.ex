@@ -34,17 +34,25 @@ defmodule HybridBlogWeb.UserLive.FormComponent do
   end
 
   defp ensure_current_user?(%{current_user: %{id: id}, id: id}), do: true
-  defp ensure_current_user?(_socket), do: false
+  defp ensure_current_user?(_assigns), do: false
 
-  defp save_user(socket, :edit, %{"roles" => _} = user_params) do
+  defp save_user(socket, :edit, %{"roles" => roles} = user_params) do
     user_params =
       case ensure_permitted(socket.assigns, "edit_user_roles") do
-        :ok -> user_params
-        {:error, _} -> Map.delete(user_params, "roles")
+        :ok ->
+          Map.put(
+            user_params,
+            "roles",
+            Accounts.get_roles(roles)
+          )
+
+        {:error, _} ->
+          Map.delete(user_params, "roles")
       end
 
     with true <-
-           ensure_current_user?(socket) || ensure_permitted(socket.assigns, "edit_users") == :ok,
+           ensure_current_user?(socket.assigns) ||
+             ensure_permitted(socket.assigns, "edit_users") == :ok,
          {:ok, user} <- Accounts.update_user(socket.assigns.user, user_params) do
       :ok =
         HybridBlogWeb.Endpoint.broadcast_from(

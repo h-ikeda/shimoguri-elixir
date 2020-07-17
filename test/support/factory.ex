@@ -11,13 +11,7 @@ defmodule HybridBlog.Factory do
     }
   end
 
-  def build(:role) do
-    %Role{
-      name: unique_role_name(),
-      permissions: []
-    }
-  end
-
+  def build(:role), do: %Role{name: unique_role_name()}
   def build(factory, attrs), do: build(factory) |> struct!(attrs)
   def insert!(factory, attrs \\ []), do: build(factory, attrs) |> Repo.insert!()
 
