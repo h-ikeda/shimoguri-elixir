@@ -32,7 +32,7 @@ host_name =
 config :hybrid_blog, HybridBlogWeb.Endpoint,
   url: [host: host_name, port: 443, scheme: "https"],
   http: [
-    port: String.to_integer(System.get_env("PORT") || "4000"),
+    port: String.to_integer(System.get_env("PORT")) || {:system, "PORT"},
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base
