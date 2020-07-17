@@ -33,6 +33,7 @@ To deploy onto the Gigalixir from GitHub repository:
   3. Add environment variables to the Gigalixir app:
      * `GOOGLE_CLIENT_ID`: OAuth client ID for production (or staging).
      * `GOOGLE_CLIENT_SECRET`: OAuth client secret for production (or staging).
+     * `HOST_NAME`
   4. Add secrets to the GitHub repository:
      * `GIGALIXIR_APP_NAME`
      * `GIGALIXIR_EMAIL`

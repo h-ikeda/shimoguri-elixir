@@ -23,7 +23,14 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+host_name =
+  System.get_env("HOST_NAME") ||
+    raise """
+    environment variable HOST_NAME is missing.
+    """
+
 config :hybrid_blog, HybridBlogWeb.Endpoint,
+  url: [host: host_name, port: 443, scheme: "https"],
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
