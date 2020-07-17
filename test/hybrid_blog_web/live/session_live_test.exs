@@ -3,6 +3,7 @@ defmodule HybridBlogWeb.SessionLiveTest do
   import HybridBlog.Factory
   import Phoenix.LiveViewTest
   alias HybridBlogWeb.SessionLive
+
   describe "Signing menu" do
     test "shows the sign in / up button", %{conn: conn} do
       {:ok, _view, html} = live_isolated(conn, SessionLive.Menu)
