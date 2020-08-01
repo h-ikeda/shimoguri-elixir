@@ -19,7 +19,7 @@ defmodule HybridBlog.AccountsTest do
       role3 = build(:role)
       insert!(:user, roles: [role1])
       insert!(:user, roles: [role2, role3])
-      assert [%{roles: [role1]}, %{roles: [role2, role3]}] = Accounts.list_users()
+      assert Enum.sort([%{roles: [role1]}, %{roles: [role2, role3]}]) == Enum.sort(Accounts.list_users())
     end
 
     test "get_user!/1 returns the user with given id" do
