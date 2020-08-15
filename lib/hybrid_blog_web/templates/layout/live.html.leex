@@ -1,1 +1,9 @@
 <%= @inner_content %>
+<%= for level <- [:info, :error] do %>
+  <%= if message = live_flash(@flash, level) do %>
+    <p class="fixed inset-x-0 bottom-0 mb-16 mx-4 h-12 pl-4 flex items-center justify-between rounded shadow text-sm bg-black" role="alert">
+      <%= message %>
+      <button onclick="this.parentNode.remove()" class="self-stretch px-4 text-yellow-600">DISMISS</button>
+    </p>
+  <% end %>
+<% end %>

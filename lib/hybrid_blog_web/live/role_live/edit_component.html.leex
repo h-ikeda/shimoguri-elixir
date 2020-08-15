@@ -1,0 +1,33 @@
+<p class="text-3xl font-thin px-5">
+  <%= case @action do %>
+    <% :edit -> %><%= gettext "Edit the role" %>
+    <% :new -> %><%= gettext "Create a role" %>
+  <% end %>
+</p>
+<%= f = form_for @changeset, "#",
+  id: @form_id,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <div class="px-4 flex items-end space-x-2">
+    <i class="material-icons mb-3 opacity-75">label</i>
+    <div class="flex-grow">
+      <%= label f, :name, class: "text-xs" %>
+      <%= text_input f, :name, class: "w-full h-12 px-4 rounded border bg-black bg-opacity-50" %>
+    </div>
+  </div>
+  <p class="pl-12">
+    <%= error_tag f, :name %>
+  </p>
+
+  <div class="px-4 flex items-start space-x-2">
+    <i class="material-icons mt-8 opacity-75">assignment</i>
+    <div class="flex-grow">
+      <%= label f, :permissions, class: "text-xs" %>
+      <%= multiple_select f, :permissions, @permissions, size: length(@permissions), class: "w-full bg-black bg-opacity-50" %>
+    </div>
+  </div>
+  <p class="pl-12">
+    <%= error_tag f, :permissions %>
+  </p>
+</form>

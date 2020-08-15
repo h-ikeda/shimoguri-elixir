@@ -6,30 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title><%= title(assigns[:title]) %></title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <%= csrf_meta_tag() %>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
-    </header>
-    <main role="main" class="container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-      <%= @inner_content %>
-    </main>
-    <%= live_render(@conn, HybridBlogWeb.SessionLive.Menu) %>
+  <body class="min-h-screen pb-12 bg-green-900 bg-opacity-94 text-white">
+    <%= @inner_content %>
+    <footer class="fixed w-full h-12 bottom-0 px-4 flex justify-between items-center bg-green-800">
+      <%= live_render(@conn, HybridBlogWeb.NavigationLive.Menu) %>
+      <%= live_render(@conn, HybridBlogWeb.SessionLive.Menu) %>
+    </footer>
+    <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+      <aside id="dev-nav" class="px-2 flex items-end space-x-2 bg-black bg-opacity-50">
+        <span class="text-sm">DEV NAV</span>
+        <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home), class: "text-xs" %>
+        <button class="text-xs underline" onclick="document.querySelector('#dev-nav').classList.add('hidden')">Hide</button>
+      </aside>
+    <% end %>
   </body>
 </html>

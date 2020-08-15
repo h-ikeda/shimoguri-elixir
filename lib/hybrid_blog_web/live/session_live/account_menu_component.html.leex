@@ -1,7 +1,15 @@
-<%= content_tag :button, phx_click: "toggle", phx_target: @myself do %>
-  <%= img_tag @picture, width: 36, height: 36 %><%= @name %>
-<% end %>
+<button phx-click="toggle" phx-target="<%= @myself %>" class="flex items-center">
+  <%= img_tag @current_user.picture, class: "w-8 h-8 rounded object-cover" %>
+  <span class="hidden"><%= @current_user.name %></span>
+</button>
 
-<ul class="<%= if !@menu_open do %>hidden<% end %>">
-  <li><%= link "Sign out", to: Routes.session_path(@socket, :sign_out) %>
-</ul>
+<%= if @menu_open do %>
+  <nav class="absolute bottom-0 right-0 min-w-32 mr-4 mb-10 py-2 flex flex-col rounded-md shadow bg-white text-black"
+       phx-capture-click="toggle"
+       phx-target="<%= @myself %>">
+    <%= link "Profile", to: Routes.user_show_path(@socket, :show, @current_user), class: "h-12 px-4 flex items-center opacity-75 hover:bg-gray-300" %>
+    <%= link "Sign out", to: Routes.session_path(@socket, :sign_out), class: "h-12 px-4 flex items-center opacity-75 hover:bg-gray-300" %>
+  </nav>
+<% else %>
+  <nav class="hidden"></nav>
+<% end %>

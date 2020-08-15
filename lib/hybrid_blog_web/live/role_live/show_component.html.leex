@@ -1,0 +1,14 @@
+<p class="mb-3 px-4 text-3xl font-thin"><%= @role.name %></p>
+<%= if !@role.permissions || Enum.empty?(@role.permissions) do %>
+  <p class="px-4 opacity-50">(This role has no permissions.)</p>
+<% else %>
+  <dl class="px-4">
+    <dt class="py-1 opacity-75">Assigned permissions</dt>
+    <%= for permission <- @role.permissions do %>
+      <dd class="flex items-center py-1">
+      <i class="material-icons opacity-75 mr-2">check</i>
+        <%= permission %>
+      </dd>
+    <% end %>
+  </dl>
+<% end %>

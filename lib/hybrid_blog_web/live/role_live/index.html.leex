@@ -1,38 +1,26 @@
-<h1>Listing Roles</h1>
-
-<%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, HybridBlogWeb.RoleLive.FormComponent,
-    id: @role.id || :new,
-    title: @page_title,
-    action: @live_action,
-    role: @role,
-    return_to: Routes.role_index_path(@socket, :index),
-    current_user: @current_user %>
-<% end %>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Permissions</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="roles">
+<header class="h-12 px-4 flex items-center space-x-6">
+  <button class="material-icons opacity-75">arrow_back</button>
+  <span class="text-xl">Roles</span>
+</header>
+<main role="main" class="container mx-auto">
+  <nav class="pb-20">
     <%= for role <- @roles do %>
-      <tr id="role-<%= role.id %>">
-        <td><%= role.name %></td>
-        <td><%= if role.permissions, do: Enum.join(role.permissions, ", ") %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.role_show_path(@socket, :show, role) %></span>
-          <span><%= live_patch "Edit", to: Routes.role_index_path(@socket, :edit, role) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: role.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
+      <%= live_redirect to: Routes.role_show_path(@socket, :show, role), class: "h-20 flex px-4 pt-4 space-x-8 hover:bg-green-800" do %>
+        <i class="material-icons opacity-75">assignment</i>
+        <section class="overflow-hidden">
+          <span class="font-bold"><%= role.name %></span>
+            <%= if !role.permissions || Enum.empty?(role.permissions) do %>
+              <p class="opacity-25">(This role has no permissions.)</p>
+            <% else %>
+              <p class="opacity-75 truncate"><%= Enum.join role.permissions, " / " %></p>
+            <% end %>
+          </p>
+        </section>
+      <% end %>
     <% end %>
-  </tbody>
-</table>
-
-<span><%= live_patch "New Role", to: Routes.role_index_path(@socket, :new) %></span>
+  </nav>
+</main>
+<%= live_redirect to: Routes.role_show_path(@socket, :new), class: "fixed bottom-0 inset-x-0 w-max h-12 rounded-full shadow mx-auto mb-16 pl-3 pr-5 box-content bg-yellow-400 text-black flex items-center space-x-3" do %>
+  <i class="material-icons">add</i>
+  <span class="text-sm font-medium">CREATE A NEW ROLE</span>
+<% end %>
