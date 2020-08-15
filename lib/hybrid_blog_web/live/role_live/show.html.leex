@@ -1,28 +1,29 @@
-<h1>Show Role</h1>
-
-<%= if @live_action in [:edit] do %>
-  <%= live_modal @socket, HybridBlogWeb.RoleLive.FormComponent,
-    id: @role.id,
-    title: @page_title,
-    action: @live_action,
-    role: @role,
-    return_to: Routes.role_show_path(@socket, :show, @role),
-    current_user: @current_user %>
-<% end %>
-
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @role.name %>
-  </li>
-
-  <li>
-    <strong>Permissions:</strong>
-    <%= @role.permissions && Enum.join(@role.permissions, ", ") %>
-  </li>
-
-</ul>
-
-<span><%= live_patch "Edit", to: Routes.role_show_path(@socket, :edit, @role), class: "button" %></span>
-<span><%= live_redirect "Back", to: Routes.role_index_path(@socket, :index) %></span>
+<header class="h-12 px-4 flex items-center justify-between">
+  <%= case @live_action do %>
+    <% :show -> %>
+      <section class="flex items-center space-x-6">
+        <%= live_redirect "arrow_back", to: Routes.role_index_path(@socket, :index), class: "material-icons opacity-75" %>
+        <span class="flex-grow text-xl"><%= gettext "Role" %></span>
+      </section>
+      <section class="flex space-x-6">
+        <%= live_patch "edit", to: Routes.role_show_path(@socket, :edit, @role), class: "material-icons opacity-75" %>
+        <%= if has_permission?(assigns, "delete_roles") do %>
+          <button class="material-icons opacity-75" phx-click="delete" data-confirm="<%= gettext("You are trying to delete the \"%{name}\" role.\nAre you sure ?", name: @role.name)%>">delete</button>
+        <% end %>
+      </section>
+    <% :edit -> %>
+      <%= live_patch "arrow_back", to: Routes.role_show_path(@socket, :show, @role), class: "material-icons opacity-75" %>
+      <%= submit "check", phx_submit: "save", form: @form_id, class: "material-icons opacity-75" %>
+    <% :new -> %>
+      <%= live_redirect "arrow_back", to: Routes.role_index_path(@socket, :index), class: "material-icons opacity-75" %>
+      <%= submit "check", phx_submit: "save", form: @form_id, class: "material-icons opacity-75" %>
+  <% end %>
+</header>
+<main role="main" class="container mx-auto">
+  <%= case @live_action do %>
+    <% :show -> %>
+      <%= live_component @socket, HybridBlogWeb.RoleLive.ShowComponent, role: @role %>
+    <% action when action in [:edit, :new] -> %>
+      <%= live_component @socket, HybridBlogWeb.RoleLive.EditComponent, changeset: @changeset, permissions: @permissions, form_id: @form_id, action: action %>
+  <% end %>
+</main>

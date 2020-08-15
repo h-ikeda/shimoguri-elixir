@@ -1,6 +1,6 @@
 <%=
   if @authenticated do
-    live_component @socket, HybridBlogWeb.SessionLive.AccountMenuComponent, id: :account_menu, name: @current_user.name, picture: @current_user.picture
+    live_component @socket, HybridBlogWeb.SessionLive.AccountMenuComponent, id: :account_menu, current_user: @current_user
   else
     live_component @socket, HybridBlogWeb.SessionLive.SigningMenuComponent, id: :signing_menu
   end

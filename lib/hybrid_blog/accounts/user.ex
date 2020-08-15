@@ -8,6 +8,7 @@ defmodule HybridBlog.Accounts.User do
     field :name, :binary
     field :picture, :binary
     field :google_sub, :binary
+    field :role_ids, {:array, :integer}, virtual: true
 
     timestamps()
 
@@ -17,14 +18,28 @@ defmodule HybridBlog.Accounts.User do
   end
 
   @doc false
-  def changeset(user, attrs) do
+  def changeset(user, attrs, rscs \\ %{}) do
     user
-    |> cast(attrs, [:name, :picture])
+    |> cast(attrs, [:name, :picture, :role_ids])
     |> validate_required([:name, :picture])
-    |> put_roles(attrs)
+    |> validate_role_ids(rscs)
+    |> put_roles(rscs)
   end
 
-  defp put_roles(user, %{roles: roles}) when is_list(roles), do: put_assoc(user, :roles, roles)
-  defp put_roles(user, %{"roles" => roles}), do: put_roles(user, %{roles: roles})
+  defp validate_role_ids(user, %{roles: roles}) do
+    validate_subset(user, :role_ids, Enum.map(roles, & &1.id))
+  end
+
+  defp validate_role_ids(user, _) do
+    validate_change(user, :role_ids, fn :role_ids, _ -> [role_ids: "can't list roles"] end)
+  end
+
+  defp put_roles(user, %{roles: roles}) do
+    case fetch_change(user, :role_ids) do
+      {:ok, role_ids} -> put_assoc(user, :roles, Enum.filter(roles, &(&1.id in role_ids)))
+      :error -> user
+    end
+  end
+
   defp put_roles(user, _), do: user
 end

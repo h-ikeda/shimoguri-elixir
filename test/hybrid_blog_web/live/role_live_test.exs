@@ -3,237 +3,227 @@ defmodule HybridBlogWeb.RoleLiveTest do
   import HybridBlog.Factory
   import Phoenix.LiveViewTest
 
-  describe "Index" do
-    test "redirects to / without authentication", %{conn: conn} do
-      assert {:error, {:redirect, %{to: "/"}}} = live(conn, Routes.role_index_path(conn, :index))
+  describe "without authentication :" do
+    test "Index(:index) redirects to Page(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
     end
 
-    test "redirects to / without authorization", %{conn: conn} do
+    test "Show(:show) redirects to Page(:index)", %{conn: conn} do
+      role = insert!(:role)
+
+      assert live(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
+    end
+
+    test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
+      role = insert!(:role)
+
+      assert live(conn, Routes.role_show_path(conn, :edit, role))
+             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+    end
+
+    test "Show(:new) redirects to Index(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_show_path(conn, :new))
+             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+    end
+  end
+
+  describe "without permissions :" do
+    setup %{conn: conn} do
       user = insert!(:user)
       conn = init_test_session(conn, %{current_user_id: user.id})
-      assert {:error, {:redirect, %{to: "/"}}} = live(conn, Routes.role_index_path(conn, :index))
+      %{conn: conn}
     end
 
-    test "lists all roles", %{conn: conn} do
+    test "Index(:index) redirects to Page(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
+    end
+
+    test "Show(:show) redirects to Page(:index)", %{conn: conn} do
+      role = insert!(:role)
+
+      assert live(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
+    end
+
+    test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
+      role = insert!(:role)
+
+      assert live(conn, Routes.role_show_path(conn, :edit, role))
+             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+    end
+
+    test "Show(:new) redirects to Index(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_show_path(conn, :new))
+             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+    end
+  end
+
+  describe "with list_roles permission :" do
+    setup %{conn: conn} do
+      user = insert!(:user, roles: [build(:role, permissions: ["list_roles"])])
+      conn = init_test_session(conn, %{current_user_id: user.id})
+      %{conn: conn}
+    end
+
+    test "Index(:index) lists all roles", %{conn: conn} do
       role1 = insert!(:role, permissions: random_role_permissions())
       role2 = insert!(:role, permissions: random_role_permissions())
       role3 = insert!(:role, permissions: random_role_permissions())
       role4 = insert!(:role, permissions: random_role_permissions())
-      user_role = insert!(:role, permissions: ["list_roles"])
-      user = insert!(:user, roles: [user_role])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, _index_live, html} = live(conn, Routes.role_index_path(conn, :index))
-      assert html =~ "Listing Roles"
-      assert html =~ role1.name
-      assert html =~ Enum.join(role1.permissions, ", ")
-      assert html =~ role2.name
-      assert html =~ Enum.join(role2.permissions, ", ")
-      assert html =~ role3.name
-      assert html =~ Enum.join(role3.permissions, ", ")
-      assert html =~ role4.name
-      assert html =~ Enum.join(role4.permissions, ", ")
-      assert html =~ user_role.name
-      assert html =~ "list_roles"
+      role5 = insert!(:role)
+      {:ok, live, _html} = live(conn, Routes.role_index_path(conn, :index))
+      assert live |> element("a", role1.name) |> render() =~ Enum.join(role1.permissions, " / ")
+      assert live |> element("a", role2.name) |> render() =~ Enum.join(role2.permissions, " / ")
+      assert live |> element("a", role3.name) |> render() =~ Enum.join(role3.permissions, " / ")
+      assert live |> element("a", role4.name) |> render() =~ Enum.join(role4.permissions, " / ")
+      assert live |> element("a", role5.name) |> render() =~ "(This role has no permissions.)"
     end
 
-    test "rejects saving a new role without authorization", %{conn: conn} do
-      user_role = insert!(:role, permissions: ["list_roles"])
-      user = insert!(:user, roles: [user_role])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, index_live, _html} = live(conn, Routes.role_index_path(conn, :index))
-      assert index_live |> element("a", "New Role") |> render_click() =~ "New Role"
-      assert_patch(index_live, Routes.role_index_path(conn, :new))
-
-      assert index_live
-             |> form("#role-form", role: %{name: ""})
-             |> render_change() =~ "can&apos;t be blank"
-
-      name = unique_role_name()
-      permissions = random_role_permissions()
-
-      {:ok, _, html} =
-        index_live
-        |> form("#role-form", role: %{name: name, permissions: permissions})
-        |> render_submit()
-        |> follow_redirect(conn, Routes.role_index_path(conn, :index))
-
-      refute html =~ name
-      refute html =~ Enum.join(permissions, ", ")
-    end
-
-    test "saves a new role", %{conn: conn} do
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles", "create_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, index_live, _html} = live(conn, Routes.role_index_path(conn, :index))
-      assert index_live |> element("a", "New Role") |> render_click() =~ "New Role"
-      assert_patch(index_live, Routes.role_index_path(conn, :new))
-
-      assert index_live
-             |> form("#role-form", role: %{name: ""})
-             |> render_change() =~ "can&apos;t be blank"
-
-      name = unique_role_name()
-      permissions = random_role_permissions()
-
-      {:ok, _, html} =
-        index_live
-        |> form("#role-form", role: %{name: name, permissions: permissions})
-        |> render_submit()
-        |> follow_redirect(conn, Routes.role_index_path(conn, :index))
-
-      assert html =~ name
-      assert html =~ Enum.join(permissions, ", ")
-    end
-
-    test "rejects updating a role in listing without authorization", %{conn: conn} do
+    test "Show(:show) displays the role", %{conn: conn} do
       role = insert!(:role, permissions: random_role_permissions())
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, index_live, _html} = live(conn, Routes.role_index_path(conn, :index))
-      assert index_live |> element("#role-#{role.id} a", "Edit") |> render_click() =~ "Edit Role"
-      assert_patch(index_live, Routes.role_index_path(conn, :edit, role))
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
+      assert live |> has_element?("header span.text-xl", "Role")
+      assert live |> has_element?("p.text-3xl.font-thin", role.name)
 
-      assert index_live
-             |> form("#role-form", role: %{name: ""})
-             |> render_change() =~ "can&apos;t be blank"
-
-      {:ok, _, html} =
-        index_live
-        |> form("#role-form",
-          role: %{name: unique_role_name(), permissions: random_role_permissions()}
-        )
-        |> render_submit()
-        |> follow_redirect(conn, Routes.role_index_path(conn, :index))
-
-      refute html =~ "Role updated successfully"
-      assert html =~ role.name
-      assert html =~ Enum.join(role.permissions, ", ")
+      for permission <- role.permissions do
+        assert live |> has_element?("dd", permission)
+      end
     end
 
-    test "updates role in listing", %{conn: conn} do
+    test "Show(:show) displays a description when the role has no permissions", %{conn: conn} do
       role = insert!(:role)
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles", "edit_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, index_live, _html} = live(conn, Routes.role_index_path(conn, :index))
-      assert index_live |> element("#role-#{role.id} a", "Edit") |> render_click() =~ "Edit Role"
-      assert_patch(index_live, Routes.role_index_path(conn, :edit, role))
-
-      assert index_live
-             |> form("#role-form", role: %{name: ""})
-             |> render_change() =~ "can&apos;t be blank"
-
-      name = unique_role_name()
-      permissions = random_role_permissions()
-
-      {:ok, _, html} =
-        index_live
-        |> form("#role-form", role: %{name: name, permissions: permissions})
-        |> render_submit()
-        |> follow_redirect(conn, Routes.role_index_path(conn, :index))
-
-      assert html =~ "Role updated successfully"
-      assert html =~ name
-      assert html =~ Enum.join(permissions, ", ")
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
+      assert live |> has_element?("p", "(This role has no permissions.)")
     end
 
-    test "rejects deleting a role in listing without authorization", %{conn: conn} do
+    test "Show(:show) does not display the edit button", %{conn: conn} do
       role = insert!(:role)
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, index_live, _html} = live(conn, Routes.role_index_path(conn, :index))
-      assert index_live |> element("#role-#{role.id} a", "Delete") |> render_click()
-      assert has_element?(index_live, "#role-#{role.id}")
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
+      refute live |> has_element?("button.material-icons", "edit")
     end
 
-    test "deletes role in listing", %{conn: conn} do
+    test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
       role = insert!(:role)
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles", "delete_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, index_live, _html} = live(conn, Routes.role_index_path(conn, :index))
-      assert index_live |> element("#role-#{role.id} a", "Delete") |> render_click()
-      refute has_element?(index_live, "#role-#{role.id}")
+
+      assert live(conn, Routes.role_show_path(conn, :edit, role))
+             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+    end
+
+    test "Show(:new) redirects to Index(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_show_path(conn, :new))
+             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
     end
   end
 
-  describe "Show" do
-    test "redirects to / without authentication", %{conn: conn} do
+  describe "with edit_roles permission :" do
+    setup %{conn: conn} do
+      user = insert!(:user, roles: [build(:role, permissions: ["edit_roles"])])
+      conn = init_test_session(conn, %{current_user_id: user.id})
+      %{conn: conn}
+    end
+
+    test "Index(:index) redirects to Page(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
+    end
+
+    test "Show(:show) redirects to Page(:index)", %{conn: conn} do
       role = insert!(:role)
 
-      assert {:error, {:redirect, %{to: "/"}}} =
-               live(conn, Routes.role_show_path(conn, :show, role))
+      assert live(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
     end
 
-    test "redirects to / without authorization", %{conn: conn} do
+    test "Show(:edit) validates the updates", %{conn: conn} do
       role = insert!(:role)
-      user = insert!(:user)
-      conn = init_test_session(conn, %{current_user_id: user.id})
-
-      assert {:error, {:redirect, %{to: "/"}}} =
-               live(conn, Routes.role_show_path(conn, :show, role))
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :edit, role))
+      live |> form("#role-form", role: %{name: ""}) |> render_change()
+      assert live |> has_element?("p", "can't be blank")
+      live |> form("#role-form", role: %{name: unique_role_name()}) |> render_change()
+      refute live |> has_element?("p", "can't be blank")
     end
 
-    test "displays role", %{conn: conn} do
-      role = insert!(:role, permissions: random_role_permissions())
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, _show_live, html} = live(conn, Routes.role_show_path(conn, :show, role))
-      assert html =~ "Show Role"
-      assert html =~ role.name
-      assert html =~ Enum.join(role.permissions, ", ")
-    end
-
-    test "rejects updating a role within modal without authorization", %{conn: conn} do
-      role = insert!(:role, permissions: random_role_permissions())
-      user = insert!(:user, roles: [build(:role, permissions: ["list_roles"])])
-      conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, show_live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
-      assert show_live |> element("a", "Edit") |> render_click() =~ "Edit Role"
-      assert_patch(show_live, Routes.role_show_path(conn, :edit, role))
-
-      assert show_live
-             |> form("#role-form", role: %{name: ""})
-             |> render_change() =~ "can&apos;t be blank"
-
+    test "Show(:edit) updates the role", %{conn: conn} do
+      role = insert!(:role)
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :edit, role))
       name = unique_role_name()
       permissions = random_role_permissions()
 
-      {:ok, _, html} =
-        show_live
-        |> form("#role-form", role: %{name: name, permissions: permissions})
-        |> render_submit()
-        |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+      live
+      |> form("#role-form", %{role: %{name: name, permissions: permissions}})
+      |> render_submit()
 
-      refute html =~ "Role updated successfully"
-      refute html =~ name
-      refute html =~ Enum.join(permissions, ", ")
-      assert html =~ role.name
-      assert html =~ Enum.join(role.permissions, ", ")
+      assert %{"info" => "The role was updated successfully."} =
+               assert_redirect(live, Routes.page_path(conn, :index))
+
+      assert %{name: ^name, permissions: ^permissions} = HybridBlog.Accounts.get_role!(role.id)
     end
 
-    test "updates role within modal", %{conn: conn} do
-      role = insert!(:role)
+    test "Show(:new) redirects to Index(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_show_path(conn, :new))
+             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+    end
+  end
+
+  describe "with list_roles and edit_roles permission :" do
+    setup %{conn: conn} do
       user = insert!(:user, roles: [build(:role, permissions: ["list_roles", "edit_roles"])])
       conn = init_test_session(conn, %{current_user_id: user.id})
-      {:ok, show_live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
-      assert show_live |> element("a", "Edit") |> render_click() =~ "Edit Role"
-      assert_patch(show_live, Routes.role_show_path(conn, :edit, role))
+      %{conn: conn}
+    end
 
-      assert show_live
-             |> form("#role-form", role: %{name: ""})
-             |> render_change() =~ "can&apos;t be blank"
+    test "Show(:show) displays the edit link", %{conn: conn} do
+      role = insert!(:role)
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
+      assert live |> element("header a.material-icons", "edit") |> render_click()
+      assert_patch(live, Routes.role_show_path(conn, :edit, role))
+    end
+  end
 
+  describe "with create_roles permission :" do
+    setup %{conn: conn} do
+      user = insert!(:user, roles: [build(:role, permissions: ["create_roles"])])
+      conn = init_test_session(conn, %{current_user_id: user.id})
+      %{conn: conn}
+    end
+
+    test "Index(:index) redirects to Page(:index)", %{conn: conn} do
+      assert live(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
+    end
+
+    test "Show(:show) redirects to Page(:index)", %{conn: conn} do
+      role = insert!(:role)
+
+      assert live(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.page_path(conn, :index))
+    end
+
+    test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
+      role = insert!(:role)
+
+      assert live(conn, Routes.role_show_path(conn, :edit, role))
+             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+    end
+
+    test "Show(:new) creates a new role", %{conn: conn} do
+      exists = HybridBlog.Accounts.list_roles()
+      {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :new))
       name = unique_role_name()
       permissions = random_role_permissions()
 
-      {:ok, _, html} =
-        show_live
-        |> form("#role-form", role: %{name: name, permissions: permissions})
-        |> render_submit()
-        |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+      assert live
+             |> form("#role-form", %{role: %{name: name, permissions: permissions}})
+             |> render_submit()
 
-      assert html =~ "Role updated successfully"
-      assert html =~ name
-      assert html =~ Enum.join(permissions, ", ")
+      assert %{"info" => "The role was created successfully."} =
+               assert_redirect(live, Routes.page_path(conn, :index))
+
+      assert [%{name: ^name, permissions: ^permissions}] =
+               HybridBlog.Accounts.list_roles() -- exists
     end
   end
 end

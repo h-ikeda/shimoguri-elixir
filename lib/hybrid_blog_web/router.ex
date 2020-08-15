@@ -21,14 +21,12 @@ defmodule HybridBlogWeb.Router do
 
     get "/", PageController, :index
     live "/users", UserLive.Index, :index
-    live "/users/edit/:id", UserLive.Index, :edit
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/edit", UserLive.Show, :edit
     live "/roles", RoleLive.Index, :index
-    live "/roles/new", RoleLive.Index, :new
-    live "/roles/:id/edit", RoleLive.Index, :edit
+    live "/roles/new", RoleLive.Show, :new
+    live "/roles/:id/edit", RoleLive.Show, :edit
     live "/roles/:id", RoleLive.Show, :show
-    live "/roles/:id/show/edit", RoleLive.Show, :edit
     get "/auth/:provider/callback", SessionController, :callback
     get "/auth/signout", SessionController, :sign_out
   end
@@ -56,11 +54,9 @@ defmodule HybridBlogWeb.Router do
     end
   end
 
+  @spec fetch_current_user(Plug.Conn.t(), any) :: Plug.Conn.t()
   defp fetch_current_user(conn, _options) do
-    if current_user_id = get_session(conn, :current_user_id) do
-      assign(conn, :current_user, HybridBlog.Accounts.get_user_with_roles!(current_user_id))
-    else
-      conn
-    end
+    id = get_session(conn, :current_user_id)
+    assign(conn, :current_user, id && HybridBlog.Accounts.get_user_with_roles!(id))
   end
 end

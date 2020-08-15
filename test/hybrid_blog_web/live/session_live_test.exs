@@ -6,34 +6,38 @@ defmodule HybridBlogWeb.SessionLiveTest do
 
   describe "Signing menu" do
     test "shows the sign in / up button", %{conn: conn} do
-      {:ok, _view, html} = live_isolated(conn, SessionLive.Menu)
-      assert html =~ "Sign in / Sign up"
+      {:ok, view, _html} = live_isolated(conn, SessionLive.Menu)
+      assert view |> has_element?("button.material-icons", "login")
     end
 
     test "shows the sign in / up dialog", %{conn: conn} do
       {:ok, view, _html} = live_isolated(conn, SessionLive.Menu)
-
-      assert view |> element("button", "Sign in / Sign up") |> render_click() =~
-               "Sign in with Google"
+      result = view |> element("button.material-icons", "login") |> render_click()
+      assert result =~ "Sign in / Sign up"
+      assert result =~ "Sign in with Google"
     end
   end
 
   describe "Account menu" do
-    test "displays the user picture and name", %{conn: conn} do
+    setup %{conn: conn} do
       user = insert!(:user)
       conn = conn |> init_test_session(%{current_user_id: user.id})
-      {:ok, _view, html} = live_isolated(conn, SessionLive.Menu)
-      assert html =~ user.picture
-      assert html =~ user.name
+      %{conn: conn, user: user}
     end
 
-    test "shows the sign out button", %{conn: conn} do
-      user = insert!(:user)
-      conn = conn |> init_test_session(%{current_user_id: user.id})
+    test "displays the user picture and name", %{conn: conn, user: user} do
       {:ok, view, _html} = live_isolated(conn, SessionLive.Menu)
+      assert view |> has_element?("button img[src=\"#{user.picture}\"]")
+      assert view |> has_element?("button span", user.name)
+    end
 
-      assert view |> element("button", user.name) |> render_click() =~
-               Routes.session_path(conn, :sign_out)
+    test "shows the links to the profile and the sign out", %{conn: conn, user: user} do
+      {:ok, view, _html} = live_isolated(conn, SessionLive.Menu)
+      result = view |> element("button", user.name) |> render_click()
+      assert result =~ "Profile"
+      assert result =~ Routes.user_show_path(conn, :show, user)
+      assert result =~ "Sign out"
+      assert result =~ Routes.session_path(conn, :sign_out)
     end
   end
 end

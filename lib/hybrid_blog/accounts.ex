@@ -41,10 +41,14 @@ defmodule HybridBlog.Accounts do
   end
 
   @doc """
-  Updates a user.
+  Updates an user.
+
+  The `rscs` is a map of resources used to get associations from given ID fields.
   """
-  @spec update_user(user, map) :: {:ok, user} | {:error, Ecto.Changeset.t(user)}
-  def update_user(%User{} = user, attrs), do: user |> User.changeset(attrs) |> Repo.update()
+  @spec update_user(user, map, map) :: {:ok, user} | {:error, Ecto.Changeset.t(user)}
+  def update_user(%User{} = user, attrs, rscs \\ %{}) do
+    user |> User.changeset(attrs, rscs) |> Repo.update()
+  end
 
   @doc """
   Deletes a user.
@@ -55,8 +59,10 @@ defmodule HybridBlog.Accounts do
   @doc """
   Returns an `t:Ecto.Changeset/0` for tracking user changes.
   """
-  @spec change_user(user, map) :: Ecto.Changeset.t(user)
-  def change_user(%User{} = user, attrs \\ %{}), do: User.changeset(user, attrs)
+  @spec change_user(user, map, map) :: Ecto.Changeset.t(user)
+  def change_user(%User{} = user, attrs \\ %{}, rscs \\ %{}) do
+    User.changeset(user, attrs, rscs)
+  end
 
   @doc """
   Gets a single user by a specific field.

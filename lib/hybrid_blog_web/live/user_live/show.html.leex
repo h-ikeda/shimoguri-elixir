@@ -1,35 +1,26 @@
-<h1>Show User</h1>
-
-<%= if @live_action in [:edit] do %>
-  <%= live_modal @socket, HybridBlogWeb.UserLive.FormComponent,
-    id: @user.id,
-    title: @page_title,
-    action: @live_action,
-    user: @user,
-    return_to: Routes.user_show_path(@socket, :show, @user),
-    current_user: @current_user %>
-<% end %>
-
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @user.name %>
-  </li>
-
-  <li>
-    <strong>Picture:</strong>
-    <%= @user.picture %>
-  </li>
-
-  <%= if @show_roles do %>
-    <li>
-      <strong>Roles:</strong>
-      <%= Enum.map_join(@user.roles, ", ", &(&1.name)) %>
-    </li>
+<header class="h-12 px-4 flex justify-between items-center">
+  <%= case @live_action do %>
+    <% :show -> %>
+      <%= live_redirect "arrow_back", to: Routes.user_index_path(@socket, :index), class: "material-icons opacity-75" %>
+      <section class="flex space-x-6">
+        <%= if @user_editable do %>
+          <%= live_patch "edit", to: Routes.user_show_path(@socket, :edit, @user), class: "material-icons opacity-75" %>
+        <% end %>
+        <button class="material-icons opacity-75">delete</button>
+      </section>
+    <% :edit -> %>
+      <%= live_patch "arrow_back", to: Routes.user_show_path(@socket, :show, @user), class: "material-icons opacity-75" %>
+      <%= submit "check", phx_submit: "save", form: @form_id, class: "material-icons opacity-75" %>
   <% end %>
+</header>
 
-</ul>
-
-<span><%= live_patch "Edit", to: Routes.user_show_path(@socket, :edit, @user), class: "button" %></span>
-<span><%= live_redirect "Back", to: Routes.user_index_path(@socket, :index) %></span>
+<%= case @live_action do %>
+  <% :show -> %>
+    <%= live_component @socket, HybridBlogWeb.UserLive.ShowComponent, user: @user, editable: @user_editable %>
+  <% :edit -> %>
+    <%= if @user_role_editable do %>
+      <%= live_component @socket, HybridBlogWeb.UserLive.EditComponent, user: @user, roles: @roles, changeset: @changeset, form_id: @form_id, user_role_editable: true %>
+    <% else %>
+      <%= live_component @socket, HybridBlogWeb.UserLive.EditComponent, user: @user, changeset: @changeset, form_id: @form_id, user_role_editable: false %>
+    <% end %>
+<% end %>

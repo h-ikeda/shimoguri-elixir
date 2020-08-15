@@ -102,11 +102,20 @@ defmodule HybridBlog.AccountsTest do
       assert user == Accounts.get_user!(user.id)
     end
 
-    test "update_user/2 with roles association updates the user roles" do
-      role = insert!(:role)
+    test "update_user/3 with role_ids and role resources updates the user roles" do
+      role1 = insert!(:role)
+      role2 = insert!(:role)
       user = insert!(:user, roles: [])
-      assert {:ok, %User{} = user} = Accounts.update_user(user, %{"roles" => [role]})
-      assert user.roles == [role]
+
+      assert {:ok, %User{} = user} =
+               Accounts.update_user(user, %{role_ids: [role1.id]}, %{roles: [role1, role2]})
+
+      assert user.roles == [role1]
+    end
+
+    test "update_user/3 with role_ids without role resources returns an error changeset" do
+      user = insert!(:user, roles: [])
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, %{role_ids: [1]}, %{})
     end
 
     test "delete_user/1 deletes the user" do

@@ -1,23 +1,24 @@
-<button phx-click="toggle" phx-target="<%= @myself %>">
-  Sign in / Sign up
+<button class="material-icons h-8 opacity-75" phx-click="toggle" phx-target="<%= @myself %>">
+  login
 </button>
 
-<aside phx-capture-click="toggle"
-       phx-window-keydown="toggle"
-       phx-key="escape"
-       phx-target="<%= @myself %>"
-       class="<%= if !@dialog_open do %>hidden<% end %>">
-  <%= if @dialog_open do %>
-    <div class="phx-modal-content"
+<%= if @dialog_open do %>
+  <aside phx-capture-click="toggle"
+         phx-window-keydown="toggle"
+         phx-key="escape"
+         phx-target="<%= @myself %>"
+         class="fixed inset-0 flex items-center justify-around bg-black bg-opacity-75">
+    <nav class="w-64 pb-2 flex flex-col rounded-lg shadow bg-white text-black"
          phx-hook="authorize">
-      <button class="phx-modal-close"
-              phx-click="toggle"
-              phx-target="<%= @myself %>">
-        &times;
-      </button>
-      <ul>
-        <li><a class="google">Sign in with Google</a>
-      </ul>
-    </div>
-  <% end %>
-</aside>
+      <span class="h-16 px-6 flex items-center text-xl font-bold opacity-75">
+        Sign in / Sign up
+      </span>
+      <a class="google h-12 px-6 flex items-center space-x-6 hover:bg-opacity-25 hover:bg-gray-400">
+        <%= img_tag Routes.static_path(@socket, "/images/btn_google.svg") %>
+        <span class="opacity-50">Sign in with Google</span>
+      </a>
+    </nav>
+  </aside>
+<% else %>
+  <aside class="hidden"></aside>
+<% end %>
