@@ -1,5 +1,4 @@
 defmodule HybridBlogWeb.LiveHelpers do
-  import Phoenix.LiveView.Helpers
   import Phoenix.LiveView
   alias HybridBlog.Accounts
   @type socket :: LiveView.Socket.t()
