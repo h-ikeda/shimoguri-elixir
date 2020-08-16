@@ -54,7 +54,8 @@ defmodule HybridBlog.MixProject do
       {:assent, "~> 0.1.12"},
       {:bypass, "~> 1.0", only: :test},
       {:mint, "~> 1.0"},
-      {:castore, "~> 0.1.6"}
+      {:castore, "~> 0.1.6"},
+      {:ex_cldr, "~> 2.0"}
     ]
   end
 

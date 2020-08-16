@@ -1,11 +1,11 @@
 <header class="h-12 px-4 flex items-center space-x-6">
   <button class="material-icons opacity-75">arrow_back</button>
-  <span class="text-xl">Users</span>
+  <span class="text-xl"><%= gettext "Users" %></span>
 </header>
 <main role="main" class="container mx-auto">
   <nav>
     <%= for user <- @users do %>
-      <%= live_patch to: Routes.user_show_path(@socket, :show, user), class: "flex items-center px-4 py-2 hover:bg-green-800" do %>
+      <%= live_patch to: Routes.i18n_user_show_path(@socket, :show, @locale, user), class: "flex items-center px-4 py-2 hover:bg-green-800" do %>
         <%= img_tag user.picture, class: "h-16 w-16 mr-4 rounded" %>
         <section>
           <span class="font-bold"><%= user.name %></span>

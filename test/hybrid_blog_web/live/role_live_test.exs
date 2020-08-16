@@ -2,30 +2,30 @@ defmodule HybridBlogWeb.RoleLiveTest do
   use HybridBlogWeb.ConnCase
   import HybridBlog.Factory
   import Phoenix.LiveViewTest
-
+  @locale "en"
   describe "without authentication :" do
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.role_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) redirects to Page(:index)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :show, role))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :edit, role))
-             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.i18n_role_show_path(conn, :show, @locale, role))
     end
 
     test "Show(:new) redirects to Index(:index)", %{conn: conn} do
       assert live(conn, Routes.role_show_path(conn, :new))
-             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_role_index_path(conn, :index, @locale))
     end
   end
 
@@ -38,26 +38,26 @@ defmodule HybridBlogWeb.RoleLiveTest do
 
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.role_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) redirects to Page(:index)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :show, role))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :edit, role))
-             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.i18n_role_show_path(conn, :show, @locale, role))
     end
 
     test "Show(:new) redirects to Index(:index)", %{conn: conn} do
       assert live(conn, Routes.role_show_path(conn, :new))
-             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_role_index_path(conn, :index, @locale))
     end
   end
 
@@ -109,12 +109,12 @@ defmodule HybridBlogWeb.RoleLiveTest do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :edit, role))
-             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.i18n_role_show_path(conn, :show, @locale, role))
     end
 
     test "Show(:new) redirects to Index(:index)", %{conn: conn} do
       assert live(conn, Routes.role_show_path(conn, :new))
-             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_role_index_path(conn, :index, @locale))
     end
   end
 
@@ -127,14 +127,14 @@ defmodule HybridBlogWeb.RoleLiveTest do
 
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.role_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) redirects to Page(:index)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :show, role))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:edit) validates the updates", %{conn: conn} do
@@ -157,14 +157,14 @@ defmodule HybridBlogWeb.RoleLiveTest do
       |> render_submit()
 
       assert %{"info" => "The role was updated successfully."} =
-               assert_redirect(live, Routes.page_path(conn, :index))
+               assert_redirect(live, Routes.i18n_page_path(conn, :index, @locale))
 
       assert %{name: ^name, permissions: ^permissions} = HybridBlog.Accounts.get_role!(role.id)
     end
 
     test "Show(:new) redirects to Index(:index)", %{conn: conn} do
       assert live(conn, Routes.role_show_path(conn, :new))
-             |> follow_redirect(conn, Routes.role_index_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_role_index_path(conn, :index, @locale))
     end
   end
 
@@ -179,7 +179,7 @@ defmodule HybridBlogWeb.RoleLiveTest do
       role = insert!(:role)
       {:ok, live, _html} = live(conn, Routes.role_show_path(conn, :show, role))
       assert live |> element("header a.material-icons", "edit") |> render_click()
-      assert_patch(live, Routes.role_show_path(conn, :edit, role))
+      assert_patch(live, Routes.i18n_role_show_path(conn, :edit, @locale, role))
     end
   end
 
@@ -192,21 +192,21 @@ defmodule HybridBlogWeb.RoleLiveTest do
 
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.role_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) redirects to Page(:index)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :show, role))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
       role = insert!(:role)
 
       assert live(conn, Routes.role_show_path(conn, :edit, role))
-             |> follow_redirect(conn, Routes.role_show_path(conn, :show, role))
+             |> follow_redirect(conn, Routes.i18n_role_show_path(conn, :show, @locale, role))
     end
 
     test "Show(:new) creates a new role", %{conn: conn} do
@@ -220,7 +220,7 @@ defmodule HybridBlogWeb.RoleLiveTest do
              |> render_submit()
 
       assert %{"info" => "The role was created successfully."} =
-               assert_redirect(live, Routes.page_path(conn, :index))
+               assert_redirect(live, Routes.i18n_page_path(conn, :index, @locale))
 
       assert [%{name: ^name, permissions: ^permissions}] =
                HybridBlog.Accounts.list_roles() -- exists

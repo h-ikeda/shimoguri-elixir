@@ -1,0 +1,141 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ja\n"
+"Plural-Forms: nplurals=1\n"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/edit_component.html.leex:4
+msgid "Create a role"
+msgstr "役割の作成"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/edit_component.html.leex:3
+msgid "Edit the role"
+msgstr "役割の編集"
+
+#, elixir-format
+#: lib/hybrid_blog_web/views/layout_view.ex:6
+#: lib/hybrid_blog_web/views/layout_view.ex:7
+msgid "Hodono Tiny Developers"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.html.leex:6
+msgid "Role"
+msgstr "役割"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.ex:132
+msgid "The role was created successfully."
+msgstr "役割が正常に作成されました。"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.ex:78
+msgid "The role was deleted successfully."
+msgstr "役割が正常に削除されました。"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.ex:110
+msgid "The role was updated successfully."
+msgstr "役割が正常に更新されました。"
+
+#, elixir-format
+#: lib/hybrid_blog_web/templates/page/index.html.eex:2
+msgid "Welcome to %{name}!"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.html.leex:11
+msgid "You are trying to delete the \"%{name}\" role.\nAre you sure ?"
+msgstr "役割「%{name}」を削除しようとしています。\n本当によろしいですか?"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/account_menu_component.html.leex:10
+#: lib/hybrid_blog_web/live/user_live/show_component.html.leex:2
+msgid "Profile"
+msgstr "プロフィール"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/index.html.leex:3
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:32 lib/hybrid_blog_web/live/user_live/show_component.html.leex:11
+msgid "Roles"
+msgstr "役割"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/signing_menu_component.html.leex:14
+msgid "Sign in / Sign up"
+msgstr "ログイン / 新規登録"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/signing_menu_component.html.leex:18
+msgid "Sign in with Google"
+msgstr "Googleでログイン"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/index.html.leex:13
+#: lib/hybrid_blog_web/live/role_live/show_component.html.leex:3
+msgid "(This role has no permissions.)"
+msgstr "(この役割に許可されている権限はありません。)"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show_component.html.leex:6
+msgid "Assigned permissions"
+msgstr "許可された権限"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/index.html.leex:25
+msgid "CREATE A NEW ROLE"
+msgstr "役割の新規作成"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:2
+msgid "Edit profile"
+msgstr "プロフィールの編集"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/navigation_live/menu.html.leex:17
+msgid "Home"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:8
+msgid "Name"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/show.ex:91
+msgid "Permission denied."
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:20
+msgid "Picture URL"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/account_menu_component.html.leex:11
+msgid "Sign out"
+msgstr "ログアウト"
+
+#, elixir-format, fuzzy
+#: lib/hybrid_blog_web/live/user_live/show.ex:83
+msgid "The user was updated successfully."
+msgstr "役割が正常に更新されました。"
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/navigation_live/menu.html.leex:12
+msgid "Title"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/index.html.leex:3
+msgid "Users"
+msgstr "ユーザー"

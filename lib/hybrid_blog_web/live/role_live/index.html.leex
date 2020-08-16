@@ -1,16 +1,16 @@
 <header class="h-12 px-4 flex items-center space-x-6">
   <button class="material-icons opacity-75">arrow_back</button>
-  <span class="text-xl">Roles</span>
+  <span class="text-xl"><%= gettext "Roles" %></span>
 </header>
 <main role="main" class="container mx-auto">
   <nav class="pb-20">
     <%= for role <- @roles do %>
-      <%= live_redirect to: Routes.role_show_path(@socket, :show, role), class: "h-20 flex px-4 pt-4 space-x-8 hover:bg-green-800" do %>
+      <%= live_redirect to: Routes.i18n_role_show_path(@socket, :show, @locale, role), class: "h-20 flex px-4 pt-4 space-x-8 hover:bg-green-800" do %>
         <i class="material-icons opacity-75">assignment</i>
         <section class="overflow-hidden">
           <span class="font-bold"><%= role.name %></span>
             <%= if !role.permissions || Enum.empty?(role.permissions) do %>
-              <p class="opacity-25">(This role has no permissions.)</p>
+              <p class="opacity-25"><%= gettext "(This role has no permissions.)" %></p>
             <% else %>
               <p class="opacity-75 truncate"><%= Enum.join role.permissions, " / " %></p>
             <% end %>
@@ -20,7 +20,7 @@
     <% end %>
   </nav>
 </main>
-<%= live_redirect to: Routes.role_show_path(@socket, :new), class: "fixed bottom-0 inset-x-0 w-max h-12 rounded-full shadow mx-auto mb-16 pl-3 pr-5 box-content bg-yellow-400 text-black flex items-center space-x-3" do %>
+<%= live_redirect to: Routes.i18n_role_show_path(@socket, :new, @locale), class: "fixed bottom-0 inset-x-0 w-max h-12 rounded-full shadow mx-auto mb-16 pl-3 pr-5 box-content bg-yellow-400 text-black flex items-center space-x-3" do %>
   <i class="material-icons">add</i>
-  <span class="text-sm font-medium">CREATE A NEW ROLE</span>
+  <span class="text-sm font-medium"><%= gettext "CREATE A NEW ROLE" %></span>
 <% end %>

@@ -1,0 +1,140 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/edit_component.html.leex:4
+msgid "Create a role"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/edit_component.html.leex:3
+msgid "Edit the role"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/views/layout_view.ex:6
+#: lib/hybrid_blog_web/views/layout_view.ex:7
+msgid "Hodono Tiny Developers"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.html.leex:6
+msgid "Role"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.ex:132
+msgid "The role was created successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.ex:78
+msgid "The role was deleted successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.ex:110
+msgid "The role was updated successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/templates/page/index.html.eex:2
+msgid "Welcome to %{name}!"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show.html.leex:11
+msgid "You are trying to delete the \"%{name}\" role.\nAre you sure ?"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/account_menu_component.html.leex:10
+#: lib/hybrid_blog_web/live/user_live/show_component.html.leex:2
+msgid "Profile"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/index.html.leex:3
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:32 lib/hybrid_blog_web/live/user_live/show_component.html.leex:11
+msgid "Roles"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/signing_menu_component.html.leex:14
+msgid "Sign in / Sign up"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/signing_menu_component.html.leex:18
+msgid "Sign in with Google"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/index.html.leex:13
+#: lib/hybrid_blog_web/live/role_live/show_component.html.leex:3
+msgid "(This role has no permissions.)"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/show_component.html.leex:6
+msgid "Assigned permissions"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/role_live/index.html.leex:25
+msgid "CREATE A NEW ROLE"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:2
+msgid "Edit profile"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/navigation_live/menu.html.leex:17
+msgid "Home"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:8
+msgid "Name"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/show.ex:91
+msgid "Permission denied."
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/edit_component.html.leex:20
+msgid "Picture URL"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/session_live/account_menu_component.html.leex:11
+msgid "Sign out"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/show.ex:83
+msgid "The user was updated successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/navigation_live/menu.html.leex:12
+msgid "Title"
+msgstr ""
+
+#, elixir-format
+#: lib/hybrid_blog_web/live/user_live/index.html.leex:3
+msgid "Users"
+msgstr ""

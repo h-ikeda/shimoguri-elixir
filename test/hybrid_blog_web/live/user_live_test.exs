@@ -2,11 +2,11 @@ defmodule HybridBlogWeb.UserLiveTest do
   use HybridBlogWeb.ConnCase
   import HybridBlog.Factory
   import Phoenix.LiveViewTest
-
+  @locale "en"
   describe "without authentication :" do
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.user_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) displays the user without roles", %{conn: conn} do
@@ -21,7 +21,7 @@ defmodule HybridBlogWeb.UserLiveTest do
       user = insert!(:user)
 
       assert live(conn, Routes.user_show_path(conn, :edit, user))
-             |> follow_redirect(conn, Routes.user_show_path(conn, :show, user))
+             |> follow_redirect(conn, Routes.i18n_user_show_path(conn, :show, @locale, user))
     end
   end
 
@@ -34,7 +34,7 @@ defmodule HybridBlogWeb.UserLiveTest do
 
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.user_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) displays the user without roles", %{conn: conn} do
@@ -61,21 +61,21 @@ defmodule HybridBlogWeb.UserLiveTest do
     test "Show(:show) displays the edit button for the current user", %{conn: conn, user: user} do
       assert {:ok, live, _html} = live(conn, Routes.user_show_path(conn, :show, user))
       live |> element("a.material-icons", "edit") |> render_click()
-      assert_patch(live, Routes.user_show_path(conn, :edit, user))
+      assert_patch(live, Routes.i18n_user_show_path(conn, :edit, @locale, user))
     end
 
     test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
       user = insert!(:user)
 
       assert live(conn, Routes.user_show_path(conn, :edit, user))
-             |> follow_redirect(conn, Routes.user_show_path(conn, :show, user))
+             |> follow_redirect(conn, Routes.i18n_user_show_path(conn, :show, @locale, user))
     end
 
     test "Show(:edit) updates the current user", %{conn: conn, user: user} do
       {:ok, live, _html} = live(conn, Routes.user_show_path(conn, :edit, user))
       user_params = %{name: unique_user_name(), picture: unique_user_picture()}
       live |> form("#user-form", %{user: user_params}) |> render_submit()
-      assert_patch(live, Routes.user_show_path(conn, :show, user))
+      assert_patch(live, Routes.i18n_user_show_path(conn, :show, @locale, user))
       assert live |> has_element?(".text-2xl", user_params.name)
       assert live |> has_element?("img[src=\"#{user_params.picture}\"]")
     end
@@ -130,14 +130,14 @@ defmodule HybridBlogWeb.UserLiveTest do
       user = insert!(:user)
       {:ok, live, _html} = live(conn, Routes.user_index_path(conn, :index))
       assert live |> element("main a", user.name) |> render_click()
-      assert_patch(live, Routes.user_show_path(conn, :show, user))
+      assert_patch(live, Routes.i18n_user_show_path(conn, :show, @locale, user))
     end
 
     test "Show(:edit) redirects to Show(:show)", %{conn: conn} do
       user = insert!(:user)
 
       assert live(conn, Routes.user_show_path(conn, :edit, user))
-             |> follow_redirect(conn, Routes.user_show_path(conn, :show, user))
+             |> follow_redirect(conn, Routes.i18n_user_show_path(conn, :show, @locale, user))
     end
   end
 
@@ -150,7 +150,7 @@ defmodule HybridBlogWeb.UserLiveTest do
 
     test "Index(:index) redirects to Page(:index)", %{conn: conn} do
       assert live(conn, Routes.user_index_path(conn, :index))
-             |> follow_redirect(conn, Routes.page_path(conn, :index))
+             |> follow_redirect(conn, Routes.i18n_page_path(conn, :index, @locale))
     end
 
     test "Show(:show) displays the user", %{conn: conn} do
@@ -185,8 +185,8 @@ defmodule HybridBlogWeb.UserLiveTest do
       {:ok, live, _html} = live(conn, Routes.user_show_path(conn, :edit, user))
       user_params = %{name: unique_user_name(), picture: unique_user_picture()}
       live |> form("#user-form", user: user_params) |> render_submit()
-      assert_patch(live, Routes.user_show_path(conn, :show, user))
-      assert live |> has_element?("p", "User updated successfully")
+      assert_patch(live, Routes.i18n_user_show_path(conn, :show, @locale, user))
+      assert live |> has_element?("p", "The user was updated successfully")
       assert live |> has_element?(".text-2xl", user_params.name)
       assert live |> has_element?("img[src=\"#{user_params.picture}\"]")
     end
@@ -229,7 +229,7 @@ defmodule HybridBlogWeb.UserLiveTest do
       }
 
       live |> form("#user-form", %{user: user_params}) |> render_submit()
-      assert_patch(live, Routes.user_show_path(conn, :show, user))
+      assert_patch(live, Routes.i18n_user_show_path(conn, :show, @locale, user))
       assert live |> has_element?(".text-2xl", user_params.name)
       assert live |> has_element?("img[src=\"#{user_params.picture}\"]")
       assert live |> has_element?("dd", role.name)

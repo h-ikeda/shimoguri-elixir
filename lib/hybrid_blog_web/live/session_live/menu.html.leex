@@ -1,7 +1,7 @@
 <%=
   if @authenticated do
-    live_component @socket, HybridBlogWeb.SessionLive.AccountMenuComponent, id: :account_menu, current_user: @current_user
+    live_component @socket, HybridBlogWeb.SessionLive.AccountMenuComponent, id: :account_menu, current_user: @current_user, locale: @locale
   else
-    live_component @socket, HybridBlogWeb.SessionLive.SigningMenuComponent, id: :signing_menu
+    live_component @socket, HybridBlogWeb.SessionLive.SigningMenuComponent, id: :signing_menu, locale: @locale
   end
 %>

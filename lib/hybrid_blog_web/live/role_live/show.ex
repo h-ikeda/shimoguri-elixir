@@ -7,6 +7,7 @@ defmodule HybridBlogWeb.RoleLive.Show do
     socket =
       socket
       |> assign_current_user(session)
+      |> assign_locale(session)
       |> assign(form_id: "role-form", permissions: Accounts.Role.permissions())
 
     {:ok, socket}
@@ -18,7 +19,7 @@ defmodule HybridBlogWeb.RoleLive.Show do
       if has_permission?(assigns, "list_roles") do
         socket |> assign_role(id)
       else
-        socket |> redirect(to: Routes.page_path(socket, :index))
+        socket |> redirect(to: Routes.i18n_page_path(socket, :index, assigns.locale))
       end
 
     {:noreply, socket}
@@ -29,7 +30,7 @@ defmodule HybridBlogWeb.RoleLive.Show do
       if has_permission?(assigns, "edit_roles") do
         socket |> assign_role(id) |> assign_changeset()
       else
-        socket |> push_patch(to: Routes.role_show_path(socket, :show, id))
+        socket |> push_patch(to: Routes.i18n_role_show_path(socket, :show, assigns.locale, id))
       end
 
     {:noreply, socket}
@@ -40,7 +41,7 @@ defmodule HybridBlogWeb.RoleLive.Show do
       if has_permission?(assigns, "create_roles") do
         socket |> assign_new_role() |> assign_changeset()
       else
-        socket |> push_redirect(to: Routes.role_index_path(socket, :index))
+        socket |> push_redirect(to: Routes.i18n_role_index_path(socket, :index, assigns.locale))
       end
 
     {:noreply, socket}
@@ -75,7 +76,7 @@ defmodule HybridBlogWeb.RoleLive.Show do
 
             socket
             |> put_flash(:info, gettext("The role was deleted successfully."))
-            |> push_redirect(to: Routes.role_index_path(socket, :index))
+            |> push_redirect(to: Routes.i18n_role_index_path(socket, :index, assigns.locale))
         end
       else
         socket
@@ -107,13 +108,14 @@ defmodule HybridBlogWeb.RoleLive.Show do
             socket
             |> assign(:role, role)
             |> put_flash(:info, gettext("The role was updated successfully."))
-            |> push_patch(to: Routes.role_show_path(socket, :show, role))
+            |> push_patch(to: Routes.i18n_role_show_path(socket, :show, assigns.locale, role))
 
           {:error, %Ecto.Changeset{} = changeset} ->
             socket |> assign(:changeset, changeset)
         end
       else
-        socket |> push_patch(to: Routes.role_show_path(socket, :show, assigns.role))
+        socket
+        |> push_patch(to: Routes.i18n_role_show_path(socket, :show, assigns.locale, assigns.role))
       end
 
     {:noreply, socket}
@@ -128,13 +130,13 @@ defmodule HybridBlogWeb.RoleLive.Show do
 
             socket
             |> put_flash(:info, gettext("The role was created successfully."))
-            |> push_patch(to: Routes.role_show_path(socket, :show, role))
+            |> push_patch(to: Routes.i18n_role_show_path(socket, :show, assigns.locale, role))
 
           {:error, %Ecto.Changeset{} = changeset} ->
             socket |> assign(:changeset, changeset)
         end
       else
-        socket |> push_redirect(to: Routes.role_index_path(socket, :index))
+        socket |> push_redirect(to: Routes.i18n_role_index_path(socket, :index, assigns.locale))
       end
 
     {:noreply, socket}

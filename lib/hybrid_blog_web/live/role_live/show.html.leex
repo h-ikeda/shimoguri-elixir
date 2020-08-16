@@ -2,20 +2,20 @@
   <%= case @live_action do %>
     <% :show -> %>
       <section class="flex items-center space-x-6">
-        <%= live_redirect "arrow_back", to: Routes.role_index_path(@socket, :index), class: "material-icons opacity-75" %>
+        <%= live_redirect "arrow_back", to: Routes.i18n_role_index_path(@socket, :index, @locale), class: "material-icons opacity-75" %>
         <span class="flex-grow text-xl"><%= gettext "Role" %></span>
       </section>
       <section class="flex space-x-6">
-        <%= live_patch "edit", to: Routes.role_show_path(@socket, :edit, @role), class: "material-icons opacity-75" %>
+        <%= live_patch "edit", to: Routes.i18n_role_show_path(@socket, :edit, @locale, @role), class: "material-icons opacity-75" %>
         <%= if has_permission?(assigns, "delete_roles") do %>
           <button class="material-icons opacity-75" phx-click="delete" data-confirm="<%= gettext("You are trying to delete the \"%{name}\" role.\nAre you sure ?", name: @role.name)%>">delete</button>
         <% end %>
       </section>
     <% :edit -> %>
-      <%= live_patch "arrow_back", to: Routes.role_show_path(@socket, :show, @role), class: "material-icons opacity-75" %>
+      <%= live_patch "arrow_back", to: Routes.i18n_role_show_path(@socket, :show, @locale, @role), class: "material-icons opacity-75" %>
       <%= submit "check", phx_submit: "save", form: @form_id, class: "material-icons opacity-75" %>
     <% :new -> %>
-      <%= live_redirect "arrow_back", to: Routes.role_index_path(@socket, :index), class: "material-icons opacity-75" %>
+      <%= live_redirect "arrow_back", to: Routes.i18n_role_index_path(@socket, :index, @locale), class: "material-icons opacity-75" %>
       <%= submit "check", phx_submit: "save", form: @form_id, class: "material-icons opacity-75" %>
   <% end %>
 </header>

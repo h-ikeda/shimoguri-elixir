@@ -1,11 +1,11 @@
 <main>
-  <span class="text-3xl font-thin px-5">Edit profile</span>
+  <span class="text-3xl font-thin px-5"><%= gettext "Edit profile" %></span>
   <%= f = form_for @changeset, "#", phx_change: "validate", phx_submit: "save", phx_window_keydown: "close", phx_key: "escape", phx_page_loading: true, id: @form_id %>
     <div class="px-4 flex items-end space-x-2">
       <i class="material-icons mb-3 opacity-75">person</i>
       <div class="flex-grow">
         <%= label f, :name, class: "text-xs" do %>
-          Name
+          <%= gettext "Name" %>
         <% end %>
         <%= text_input f, :name, class: "w-full h-12 rounded px-4 bg-black bg-opacity-50 border" %>
       </div>
@@ -17,7 +17,7 @@
       <i class="material-icons mb-3 opacity-75">image</i>
       <div class="flex-grow">
         <%= label f, :picture, class: "text-xs" do %>
-          Picture URL
+          <%= gettext "Picture URL" %>
         <% end %>
         <%= text_input f, :picture, class: "w-full h-12 rounded px-4 bg-black bg-opacity-50 border" %>
       </div>
@@ -29,7 +29,7 @@
       <i class="material-icons mt-8 opacity-75">assignment</i>
       <div class="flex-grow">
         <%= label f, :roles, class: "text-xs" do %>
-          Roles
+          <%= gettext "Roles" %>
         <% end %>
         <%= cond do %>
           <% @user_role_editable -> %>
