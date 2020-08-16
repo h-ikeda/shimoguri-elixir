@@ -16,17 +16,19 @@ defmodule HybridBlogWeb.Router do
     plug :fetch_session
   end
 
+  pipeline :localize do
+    plug Cldr.Plug.SetLocale,
+      apps: [:cldr, :gettext],
+      cldr: HybridBlogWeb.Cldr,
+      from: [:path, :session, :accept_language],
+      param: "locale",
+      session_key: "locale"
+
+    plug :put_locale
+  end
+
   scope "/", HybridBlogWeb do
     pipe_through :browser
-
-    get "/", PageController, :index
-    live "/users", UserLive.Index, :index
-    live "/users/:id", UserLive.Show, :show
-    live "/users/:id/edit", UserLive.Show, :edit
-    live "/roles", RoleLive.Index, :index
-    live "/roles/new", RoleLive.Show, :new
-    live "/roles/:id/edit", RoleLive.Show, :edit
-    live "/roles/:id", RoleLive.Show, :show
     get "/auth/:provider/callback", SessionController, :callback
     get "/auth/signout", SessionController, :sign_out
   end
@@ -54,9 +56,29 @@ defmodule HybridBlogWeb.Router do
     end
   end
 
+  for {as, path} <- [{false, "/"}, {:i18n, "/:locale"}] do
+    scope path, HybridBlogWeb, as: as do
+      pipe_through [:browser, :localize]
+      get "/", PageController, :index
+      live "/users", UserLive.Index, :index
+      live "/users/:id", UserLive.Show, :show
+      live "/users/:id/edit", UserLive.Show, :edit
+      live "/roles", RoleLive.Index, :index
+      live "/roles/new", RoleLive.Show, :new
+      live "/roles/:id/edit", RoleLive.Show, :edit
+      live "/roles/:id", RoleLive.Show, :show
+    end
+  end
+
   @spec fetch_current_user(Plug.Conn.t(), any) :: Plug.Conn.t()
   defp fetch_current_user(conn, _options) do
     id = get_session(conn, :current_user_id)
     assign(conn, :current_user, id && HybridBlog.Accounts.get_user_with_roles!(id))
+  end
+
+  @spec put_locale(Plug.Conn.t(), any) :: Plug.Conn.t()
+  defp put_locale(conn, _options) do
+    locale = Gettext.get_locale()
+    conn |> assign(:locale, locale) |> put_session(:locale, locale)
   end
 end

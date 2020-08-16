@@ -12,6 +12,16 @@ defmodule HybridBlogWeb.LiveHelpers do
     end)
   end
 
+  @spec assign_locale(socket, map) :: socket
+  def assign_locale(socket, session) do
+    assign_new(socket, :locale, fn ->
+      locale = session["locale"]
+      Cldr.put_locale(HybridBlogWeb.Cldr, locale)
+      Gettext.put_locale(locale)
+      locale
+    end)
+  end
+
   @spec has_permission?(map, binary) :: boolean
   def has_permission?(%{current_user: current_user}, permission) when is_binary(permission) do
     if current_user, do: permission in Accounts.permissions(current_user), else: false

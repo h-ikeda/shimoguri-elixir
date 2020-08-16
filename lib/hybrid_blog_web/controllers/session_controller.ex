@@ -92,6 +92,6 @@ defmodule HybridBlogWeb.SessionController do
 
   @spec redirect_uri(atom) :: binary
   defp redirect_uri(provider) do
-    HybridBlogWeb.Router.Helpers.session_url(HybridBlogWeb.Endpoint, :callback, provider)
+    Routes.session_url(HybridBlogWeb.Endpoint, :callback, provider)
   end
 end

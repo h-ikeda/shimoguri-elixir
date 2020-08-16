@@ -1,15 +1,15 @@
 <header class="h-12 px-4 flex justify-between items-center">
   <%= case @live_action do %>
     <% :show -> %>
-      <%= live_redirect "arrow_back", to: Routes.user_index_path(@socket, :index), class: "material-icons opacity-75" %>
+      <%= live_redirect "arrow_back", to: Routes.i18n_user_index_path(@socket, :index, @locale), class: "material-icons opacity-75" %>
       <section class="flex space-x-6">
         <%= if @user_editable do %>
-          <%= live_patch "edit", to: Routes.user_show_path(@socket, :edit, @user), class: "material-icons opacity-75" %>
+          <%= live_patch "edit", to: Routes.i18n_user_show_path(@socket, :edit, @locale, @user), class: "material-icons opacity-75" %>
         <% end %>
         <button class="material-icons opacity-75">delete</button>
       </section>
     <% :edit -> %>
-      <%= live_patch "arrow_back", to: Routes.user_show_path(@socket, :show, @user), class: "material-icons opacity-75" %>
+      <%= live_patch "arrow_back", to: Routes.i18n_user_show_path(@socket, :show, @locale, @user), class: "material-icons opacity-75" %>
       <%= submit "check", phx_submit: "save", form: @form_id, class: "material-icons opacity-75" %>
   <% end %>
 </header>

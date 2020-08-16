@@ -8,6 +8,7 @@ defmodule HybridBlogWeb.UserLive.Show do
     socket =
       socket
       |> assign_current_user(session)
+      |> assign_locale(session)
       |> assign(user: Accounts.get_user_with_roles!(id), form_id: "user-form")
 
     if connected?(socket), do: Endpoint.subscribe("user:#{id}")
@@ -33,7 +34,7 @@ defmodule HybridBlogWeb.UserLive.Show do
           user_role_editable: user_role_editable?(assigns)
         )
       else
-        socket |> push_patch(to: Routes.user_show_path(socket, :show, user))
+        socket |> push_patch(to: Routes.i18n_user_show_path(socket, :show, assigns.locale, user))
       end
 
     {:noreply, socket}
@@ -79,16 +80,16 @@ defmodule HybridBlogWeb.UserLive.Show do
 
             socket
             |> assign(:user, user)
-            |> put_flash(:info, "User updated successfully.")
-            |> push_patch(to: Routes.user_show_path(socket, :show, user))
+            |> put_flash(:info, gettext("The user was updated successfully."))
+            |> push_patch(to: Routes.i18n_user_show_path(socket, :show, assigns.locale, user))
 
           {:error, %Ecto.Changeset{} = changeset} ->
             socket |> assign(:changeset, changeset)
         end
       else
         socket
-        |> put_flash(:error, "Permission denied.")
-        |> push_patch(to: Routes.user_show_path(socket, :show, assigns.user))
+        |> put_flash(:error, gettext("Permission denied."))
+        |> push_patch(to: Routes.i18n_user_show_path(socket, :show, assigns.locale, assigns.user))
       end
 
     {:noreply, socket}

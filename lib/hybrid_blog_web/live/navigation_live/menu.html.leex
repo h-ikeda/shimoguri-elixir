@@ -9,12 +9,12 @@
         <p class="flex items-end h-16 px-4 pb-2 text-xl">
           <span class="flex items-center">
             <button class="material-icons mr-6 opacity-75" phx-click="toggle">close</button>
-            Title
+            <%= gettext "Title" %>
           </span>
         </p>
-        <%= link to: Routes.page_path(@socket, :index), class: "flex items-center h-12 px-4 text-sm opacity-75 hover:bg-green-600" do %>
+        <%= link to: Routes.i18n_page_path(@socket, :index, @locale), class: "flex items-center h-12 px-4 text-sm opacity-75 hover:bg-green-600" do %>
           <i class="material-icons mr-6">home</i>
-          Home
+          <%= gettext "Home" %>
         <% end %>
       </div>
     </nav>
