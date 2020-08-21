@@ -8,7 +8,7 @@ COPY --from=node /usr/local/lib/node_modules /usr/local/bin/node_modules
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends lsb-release
-RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends postgresql-12
@@ -20,4 +20,4 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # [Optional] Uncomment if you want to install more global node modules
 # RUN sudo -u node npm install -g <your-package-list-here>
 
-CMD [ "pg_ctlcluster", "12", "main", "--foreground" ]
+CMD [ "pg_ctlcluster", "12", "main", "start", "--foreground" ]
