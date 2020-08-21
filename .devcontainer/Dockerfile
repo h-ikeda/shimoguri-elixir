@@ -7,7 +7,7 @@ COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends lsb-release
+    && apt-get -y install --no-install-recommends lsb-release inotify-tools
 RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
