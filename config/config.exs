@@ -30,8 +30,8 @@ locales = ["en", "ja"]
 config :hybrid_blog, HybridBlogWeb.Cldr, locales: locales, gettext: HybridBlogWeb.Gettext
 config :hybrid_blog, HybridBlogWeb.Gettext, locales: locales
 
+config :hybrid_blog, :title, "Hodono Tiny Developers"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
-
-config :hybrid_blog, :title, "Hodono Tiny Developers"
