@@ -1,12 +1,13 @@
 defmodule HybridBlogWeb.NavigationLive.Menu do
   use HybridBlogWeb, :live_view
+  @title Application.compile_env(:hybrid_blog, :title)
   @impl true
   def mount(:not_mounted_at_router, session, socket) do
     socket =
       socket
       |> assign_current_user(session)
       |> assign_locale(session)
-      |> assign(:drawer_open, false)
+      |> assign(drawer_open: false, title: gettext(@title))
 
     {:ok, socket, layout: {HybridBlogWeb.LayoutView, "live_plain.html"}}
   end
