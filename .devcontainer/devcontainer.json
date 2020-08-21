@@ -24,7 +24,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "mix local.hex --force && mix local.rebar --force && mix deps.get && npm install --prefix assets",
+	"postCreateCommand": "su postgres -c \"psql -c \\\"ALTER USER postgres PASSWORD 'postgres';\\\"\" && mix local.hex --force && mix local.rebar --force && mix deps.get && npm install --prefix assets && mix ecto.setup",
 
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "node"
