@@ -3,7 +3,7 @@ ARG VARIANT="14"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT} as node
 FROM elixir:1.10.3
 COPY --from=node /usr/local/bin/ /usr/local/bin/
-COPY --from=node /usr/local/lib/node_modules /usr/local/bin/node_modules
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
