@@ -52,7 +52,7 @@ defmodule HybridBlog.MixProject do
       {:plug_canonical_host, "~> 2.0"},
       {:floki, "~> 0.29.0", only: :test},
       {:assent, "~> 0.1.12"},
-      {:bypass, "~> 1.0", only: :test},
+      {:bypass, "~> 2.1", only: :test},
       {:mint, "~> 1.0"},
       {:castore, "~> 0.1.6"},
       {:ex_cldr, "~> 2.0"}
