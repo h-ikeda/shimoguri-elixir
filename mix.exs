@@ -50,7 +50,7 @@ defmodule HybridBlog.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.1"},
       {:plug_canonical_host, "~> 2.0"},
-      {:floki, "~> 0.31.0", only: :test},
+      {:floki, "~> 0.34.0", only: :test},
       {:assent, "~> 0.1.12"},
       {:bypass, "~> 2.1", only: :test},
       {:mint, "~> 1.0"},
